@@ -47,6 +47,7 @@ public class MessageMapper {
         this.messages.put(MessageKey.NOT_ENABLED_FOR_WORLD, new ConfigMessage("admin.not-enabled-for-world", "&cTemsSleep is not enabled in &a%world%&c. Enable it with &a/ts enable"));
         this.messages.put(MessageKey.CURRENTLY_DISABLED, new ConfigMessage("admin.currently-disabled", "&bTemsSleep is currently &cdisabled &bfor this world. Type &a/ts enable &bto enable TemsSleep for this world"));
         this.messages.put(MessageKey.CANNOT_SLEEP_NOW, new ConfigMessage("user.cannot-sleep-now", "&cYou cannot sleep right now"));
+        this.messages.put(MessageKey.SLEEP_UNSAFE, new ConfigMessage("user.sleep-unsafe", "&cYou cannot sleep right now: monsters are nearby"));
         this.messages.put(MessageKey.ALL_FLAGS_RESET_SUCCESS, new ConfigMessage("flag.all-reset-success", "&cAll flags were successfully reset"));
         this.messages.put(MessageKey.SLEEP_SUCCESS, new ConfigMessage("user.sleep-success", "&bYou are now asleep"));
         this.messages.put(MessageKey.NO_LONGER_SLEEPING, new ConfigMessage("user.no-longer-sleeping", "&cYou are no longer sleeping"));

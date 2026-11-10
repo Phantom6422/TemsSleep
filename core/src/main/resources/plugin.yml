@@ -1,6 +1,6 @@
 name: TemsSleep
 api-version: '1.21'
-version: ${project.version}
+version: ${revision}
 main: me.mrgeneralq.sleepmost.core.Sleepmost
 description: One-player sleep, night skip animations and sleep utilities.
 authors: [MrGeneralQ, LesleyXYZ, HorrendousEntity, dubsector]

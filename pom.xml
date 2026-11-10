@@ -15,7 +15,7 @@
     </modules>
     <properties>
         <!-- Single source of truth for the plugin version; bump this to release. -->
-        <revision>5.9.1</revision>
+        <revision>5.9.2</revision>
         <paper.version>1.21.11-R0.1-SNAPSHOT</paper.version>
         <spigot.version>1.21.11-R0.1-SNAPSHOT</spigot.version>
         <maven.compiler.release>21</maven.compiler.release>

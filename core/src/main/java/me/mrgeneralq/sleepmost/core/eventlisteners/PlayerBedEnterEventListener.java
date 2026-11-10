@@ -3,22 +3,19 @@ package me.mrgeneralq.sleepmost.core.eventlisteners;
 import me.mrgeneralq.sleepmost.core.enums.MessageKey;
 import me.mrgeneralq.sleepmost.core.interfaces.*;
 import me.mrgeneralq.sleepmost.core.models.SleepMostWorld;
-import me.mrgeneralq.sleepmost.core.statics.DataContainer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 
 public class PlayerBedEnterEventListener implements Listener {
 
     private final ISleepService sleepService;
     private final IMessageService messageService;
-    private final ICooldownService cooldownService;
-    private final DataContainer dataContainer;
     private final IFlagsRepository flagsRepository;
-    private final IBossBarService bossBarService;
     private final ISleepMostWorldService sleepMostWorldService;
     private final IInsomniaService insomniaService;
 
@@ -32,12 +29,9 @@ public class PlayerBedEnterEventListener implements Listener {
     ) {
         this.sleepService = sleepService;
         this.messageService = messageService;
-        this.cooldownService = cooldownService;
         this.flagsRepository = flagsRepository;
-        this.bossBarService = bossBarService;
         this.sleepMostWorldService = sleepMostWorldService;
         this.insomniaService = insomniaService;
-        this.dataContainer = DataContainer.getContainer();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -46,15 +40,38 @@ public class PlayerBedEnterEventListener implements Listener {
         Player player = e.getPlayer();
         World world = player.getWorld();
 
-        if(e.isCancelled())
+        if (!this.sleepService.isEnabledAt(world)) {
             return;
+        }
 
-        if(!this.sleepService.isEnabledAt(world))
+        /*
+         * Vanilla reports why entering the bed failed (monsters nearby, daytime,
+         * obstruction, wrong dimension, ...). The event is usually already
+         * cancelled in that case, but we still want to notify the player and make
+         * sure TemsSleep never counts a failed bed entry as sleeping.
+         */
+        BedEnterResult result = e.getBedEnterResult();
+        if (result != BedEnterResult.OK) {
+            this.sendCannotSleepMessage(player, world, result);
+            e.setCancelled(true);
+            if (this.sleepService.isPlayerAsleep(player)) {
+                this.sleepService.setSleeping(player, false);
+            }
             return;
+        }
 
-        if(!this.sleepService.isSleepingPossible(world))
+        if (e.isCancelled()) {
             return;
+        }
 
+        if (!this.sleepService.isSleepingPossible(world)) {
+            this.messageService.sendMessage(player, this.messageService.getMessagePrefixed(MessageKey.CANNOT_SLEEP_NOW)
+                    .setWorld(world)
+                    .setPlayer(player)
+                    .build());
+            e.setCancelled(true);
+            return;
+        }
 
         //check if sleep is allowed in world
         if(this.flagsRepository.getPreventSleepFlag().getValueAt(world)) {
@@ -104,5 +121,16 @@ public class PlayerBedEnterEventListener implements Listener {
 
         if(!this.sleepService.isPlayerAsleep(player))
         this.sleepService.setSleeping(player , true);
+    }
+
+    private void sendCannotSleepMessage(Player player, World world, BedEnterResult result) {
+        MessageKey key = result == BedEnterResult.NOT_SAFE
+                ? MessageKey.SLEEP_UNSAFE
+                : MessageKey.CANNOT_SLEEP_NOW;
+
+        this.messageService.sendMessage(player, this.messageService.getMessagePrefixed(key)
+                .setWorld(world)
+                .setPlayer(player)
+                .build());
     }
 }
