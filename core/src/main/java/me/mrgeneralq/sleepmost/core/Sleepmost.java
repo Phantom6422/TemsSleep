@@ -19,7 +19,7 @@ import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.command.PluginCommand;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -177,19 +177,9 @@ public class Sleepmost extends JavaPlugin {
 	}
 
 	private void registerSleepmostCommand(SleepmostCommand sleepmostCommand) {
-		try {
-			PluginCommand pluginCommand = getCommand(COMMAND_NAME);
-			if (pluginCommand != null) {
-				pluginCommand.setExecutor(sleepmostCommand);
-				pluginCommand.setTabCompleter(sleepmostCommand);
-				return;
-			}
-		} catch (UnsupportedOperationException ignored) {
-			// Paper plugins deliberately reject JavaPlugin#getCommand and require
-			// programmatic command registration instead.
-		}
-
-		// Paper plugins do not read the commands section of plugin.yml/paper-plugin.yml.
+		// TemsSleep is a Paper-only plugin. Paper plugins do not read the commands
+		// section of plugin.yml/paper-plugin.yml, so every platform module registers
+		// the command programmatically.
 		for (IPlatformModule module : this.platformModules) {
 			module.registerCommand(this, COMMAND_NAME, COMMAND_ALIASES, sleepmostCommand, sleepmostCommand);
 		}

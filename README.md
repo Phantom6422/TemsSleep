@@ -32,6 +32,9 @@ more.
 
 - Paper **26.3** or newer
 - Java **25**
+- Paper API-compatible forks of 26.3 (for example Purpur or Pufferfish) are expected to work.
+- **Spigot and Bukkit are not supported.**
+- Folia is not officially supported because TemsSleep uses the global Bukkit scheduler.
 
 ## Build
 
@@ -49,7 +52,7 @@ The shaded plugin is written to `target/TemsSleep-<version>.jar`.
 
 ## Releases and updates
 
-Releases are published from tags named `v<version>` (for example `v5.8.0`).
+Releases are published from tags named `v<version>` (for example `v5.8.1`).
 The plugin update checker reads the latest public GitHub release from
 `Phantom6422/TemsSleep` by default. Change
 `update-checker-github-repository` in `config.yml` if you use a different

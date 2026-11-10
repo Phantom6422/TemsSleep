@@ -11,11 +11,11 @@
     <modules>
         <module>core</module>
         <module>paper</module>
-        <module>spigot</module>
     </modules>
     <properties>
         <!-- Single source of truth for the plugin version; bump this to release. -->
-        <revision>5.8.0</revision>
+        <revision>5.8.1</revision>
+        <paper.version>26.3.build.248-stable</paper.version>
         <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -34,10 +34,7 @@
         </plugins>
     </build>
     <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
+
         <repository>
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
@@ -82,9 +79,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.21.11-R0.1-SNAPSHOT</version>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>${paper.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

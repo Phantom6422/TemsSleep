@@ -4,7 +4,7 @@ import me.mrgeneralq.sleepmost.core.interfaces.ISleepService;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.TimeSkipEvent;
-import org.bukkit.event.world.TimeSkipEvent.SkipReason;
+import org.bukkit.event.world.ClockTimeSkipEvent.SkipReason;
 
 public class TimeSkipEventListener implements Listener
 {
