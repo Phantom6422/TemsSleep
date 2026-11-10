@@ -3,11 +3,16 @@
 # VERSION: ${project.version}
 # SUPPORT AND DOCS: https://github.com/Phantom6422/TemsSleep
 # RELEASES: https://github.com/Phantom6422/TemsSleep/releases
+#
+# WARNING: This fork is heavily modified using AI / "vibe coding" methods.
+# Review the diff and test on a staging server before production use.
+# Keep a rollback jar available.
 
 
 # WARNING: SUPPORT IS ONLY GIVEN TO THE LATEST VERSION
 # The update checker reads the latest GitHub release tag (e.g. v5.9.0).
-# Set this to your public GitHub repository in owner/repo form.
+# The repository must be PUBLIC: private repositories cannot be read by the
+# plugin without credentials. Set this to owner/repo for your public repo.
 update-checker-enabled: true
 update-checker-github-repository: "Phantom6422/TemsSleep"
 

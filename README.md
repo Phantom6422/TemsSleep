@@ -5,8 +5,28 @@ sleep, configurable sleep percentages, night-skip animations, clock animations,
 boss bars, insomnia, AFK exemptions, GSit/PlaceholderAPI/SuperVanish hooks and
 more.
 
-TemsSleep is a rebranded fork of the original **SleepMost** project by
-MrGeneralQ and contributors.
+> **Note:** This plugin is a rebranded fork of [SleepMost](https://www.spigotmc.org/resources/60623/)
+> by [MrGeneralQ](https://github.com/MrGeneralQ) and the SleepMost contributors.
+> This fork targets Paper 26.3 and is maintained by
+> [Phantom6422](https://github.com/Phantom6422).
+
+> [!WARNING]
+> **This plugin is heavily modified using AI / "vibe coding" methods.**
+>
+> The Paper 26.3 port, rebrand, GitHub update checker, release automation,
+> command and permission changes, fixes and this documentation were produced with
+> an AI coding agent under human direction and review.
+>
+> It is tested by building, by unit tests and by a Paper 26.3 startup smoke test,
+> but it has **not** been battle-tested on a live server. Read the diff, test on a
+> staging server, and keep a rollback jar before running it in production. Treat
+> every change in here as "review before trusting".
+>
+> **Update checker note:** The plugin reads the latest **public** GitHub release.
+> A private repository cannot be read by the plugin without credentials, so make
+> `Phantom6422/TemsSleep` public (or point
+> `update-checker-github-repository` in `config.yml` at a public repository)
+> before relying on update checks.
 
 ## Requirements
 

@@ -225,8 +225,11 @@ public class Sleepmost extends JavaPlugin {
 			return;
 		}
 		try {
-			if(updateService.hasUpdate())
-				getLogger().info("UPDATE FOUND: A newer version of sleep-most is available to download!");
+			if(updateService.hasUpdate()) {
+				getLogger().info("UPDATE FOUND: A newer version of TemsSleep is available to download!");
+			} else if ("unknown".equals(updateService.getCachedUpdateVersion())) {
+				getLogger().warning("Could not read the latest GitHub release. Make sure the update-checker repository is public: " + updateService.getUpdateUrl());
+			}
 		} catch (RuntimeException exception) {
 			getLogger().warning("Could not check for updates: " + exception.getMessage());
 		}
