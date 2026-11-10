@@ -1,0 +1,36 @@
+package me.mrgeneralq.sleepmost.core.flags.controllers;
+
+import me.mrgeneralq.sleepmost.core.interfaces.IConfigRepository;
+import org.bukkit.World;
+
+public class ConfigFlagController<V> extends AbstractFlagController<V>
+{
+    private final IConfigRepository configRepository;
+
+    //refactor to take an object of IValuesSerialization<V>
+    public ConfigFlagController(IConfigRepository configRepository)
+    {
+        this.configRepository = configRepository;
+    }
+
+    @Override
+    public V getValueAt(World world)
+    {
+        Object configValue = this.configRepository.getFlagValue(this.flag, world);
+
+        if(configValue == null){
+            configValue = this.flag.getDefaultValue();
+        }
+
+        V parsed = this.flag.getSerialization().parseValueFrom(configValue);
+        return parsed == null ? this.flag.getDefaultValue() : parsed;
+    }
+
+    @Override
+    public void setValueAt(World world, V value)
+    {
+        Object serializedValue = this.flag.getSerialization().serialize(value);
+
+        this.configRepository.setFlagValue(this.flag, world, serializedValue);
+    }
+}

@@ -1,0 +1,9 @@
+# CUSTOMIZE MESSAGES FOR TEMSSLEEP.
+# To disable messages set the message to ''
+# Documentation: https://github.com/Phantom6422/TemsSleep
+# Issues: https://github.com/Phantom6422/TemsSleep/issues
+#
+# Add multiple messages to randomly select by doing the following:
+# messagetype:
+#  - 'message1'
+#  - 'message2'

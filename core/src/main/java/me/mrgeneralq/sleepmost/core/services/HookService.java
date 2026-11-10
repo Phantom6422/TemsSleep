@@ -1,0 +1,65 @@
+package me.mrgeneralq.sleepmost.core.services;
+
+import me.mrgeneralq.sleepmost.core.enums.SleepMostHook;
+import me.mrgeneralq.sleepmost.core.interfaces.IHookRepository;
+import me.mrgeneralq.sleepmost.core.interfaces.IHookService;
+import me.mrgeneralq.sleepmost.core.models.Hook;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
+
+import java.util.Optional;
+
+public class HookService implements IHookService {
+
+    private final PluginManager pluginManager;
+    private final IHookRepository hookRepository;
+
+    public HookService(PluginManager pluginManager, IHookRepository hookRepository) {
+        this.pluginManager = pluginManager;
+        this.hookRepository = hookRepository;
+    }
+
+    @Override
+    public void attemptRegister(Hook hook)  {
+
+        if(!isPluginEnabled(hook)){
+            return;
+        }
+
+        for(Hook dependency: hook.getDependencies()){
+            if(!this.pluginManager.isPluginEnabled(dependency.getName())){
+                Bukkit.getLogger().severe(String.format("[TemsSleep] Missing required dependency {%s} for {%s}", dependency.getName(), hook.getName()));
+                return;
+            }
+        }
+        hook.setEnabled(true);
+        this.hookRepository.addOrUpdate(hook);
+        Bukkit.getLogger().info(String.format("[TemsSleep] Hooked to %s" , hook.getName()));
+    }
+
+    private boolean isPluginEnabled(Hook hook) {
+        if (this.pluginManager.isPluginEnabled(hook.getName())) {
+            return true;
+        }
+        for (String alias : hook.getAliases()) {
+            if (this.pluginManager.isPluginEnabled(alias)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Optional<Hook> getHook(SleepMostHook sleepMostHook) {
+
+        Optional<Hook> hook = Optional.ofNullable(this.hookRepository.get(sleepMostHook));
+        if(hook.isEmpty()){
+            return Optional.empty();
+        }
+
+        if(!hook.get().isEnabled()){
+            return Optional.empty();
+        }
+        return hook;
+    }
+}
