@@ -8,7 +8,10 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
 import static me.mrgeneralq.sleepmost.core.statics.ChatColorUtils.colorize;
@@ -76,6 +79,22 @@ public class InfoSubCommand implements ISubCommand {
         sender.sendMessage(colorize(String.format("&b(&c%s&f/&c%s&b)  &7/ts info <page>", page , totalPages)));
         sender.sendMessage(colorize("&b*********************************************"));
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, Command command, String alias, List<String> args) {
+        if (args.size() != 1) {
+            return new ArrayList<>();
+        }
+
+        int totalPages = Math.max((int) Math.ceil(this.flagsRepository.getFlags().size() / 10.0), 1);
+        List<String> pages = new ArrayList<>(totalPages);
+        for (int page = 1; page <= totalPages; page++) {
+            pages.add(String.valueOf(page));
+        }
+
+        String prefix = args.get(0);
+        return pages.stream().filter(page -> page.startsWith(prefix)).collect(Collectors.toList());
     }
 
     private String getValueAtMessage(ISleepFlag<?> flag, World world)

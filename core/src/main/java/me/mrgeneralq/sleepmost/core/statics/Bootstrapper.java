@@ -43,6 +43,10 @@ public class Bootstrapper {
     public void initialize(Sleepmost main, PluginManager pluginManager){
 
         this.gameRuleService = GameRuleProvider.get();
+        if (this.gameRuleService == null) {
+            this.gameRuleService = new GameRuleService();
+            GameRuleProvider.registerGameRuleService(this.gameRuleService);
+        }
 
         this.hookService = new HookService(pluginManager ,new HookRepository());
         this.configRepository = new ConfigRepository(main);

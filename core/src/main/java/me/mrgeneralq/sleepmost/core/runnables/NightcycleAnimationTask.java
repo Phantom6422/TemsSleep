@@ -22,7 +22,7 @@ public class NightcycleAnimationTask extends BukkitRunnable {
      * animation. Sending one title packet per tick (the old behaviour) spammed
      * the client and made the animation flicker.
      */
-    private static final int CLOCK_TITLE_INTERVAL_TICKS = 10;
+    private static final int CLOCK_TITLE_INTERVAL_TICKS = 2;
 
     private final ISleepService sleepService;
     private final DataContainer dataContainer = DataContainer.getContainer();
@@ -150,7 +150,9 @@ public class NightcycleAnimationTask extends BukkitRunnable {
 
         for(Player p: playerList){
             if (p.isOnline()) {
-                p.sendTitle(clockTitle, clockSubTitle, 0, 70, 20);
+                // No fade: the title is replaced every couple of ticks, so it stays
+                // visually continuous instead of fading in/out on each update.
+                p.sendTitle(clockTitle, clockSubTitle, 0, 20, 0);
             }
         }
     }

@@ -1,7 +1,7 @@
 name: TemsSleep
 version: '${project.version}'
 main: me.mrgeneralq.sleepmost.core.Sleepmost
-api-version: '26.3'
+api-version: '1.21'
 description: One-player sleep, night skip animations and sleep utilities for Paper servers.
 authors: [MrGeneralQ, LesleyXYZ, HorrendousEntity, dubsector]
 website: https://github.com/Phantom6422/TemsSleep

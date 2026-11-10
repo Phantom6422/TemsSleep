@@ -30,10 +30,10 @@ more.
 
 ## Requirements
 
-- Paper **26.3** or newer
-- Java **25**
-- Paper API-compatible forks of 26.3 (for example Purpur or Pufferfish) are expected to work.
-- **Spigot and Bukkit are not supported.**
+- **Paper 1.21+** or **Spigot/Bukkit 1.21+**
+- Java **21+**
+- Tested on Paper **1.21.11** and Paper **26.3**
+- Paper API-compatible forks that track those versions (for example Purpur or Pufferfish) are expected to work.
 - Folia is not officially supported because TemsSleep uses the global Bukkit scheduler.
 
 ## Build

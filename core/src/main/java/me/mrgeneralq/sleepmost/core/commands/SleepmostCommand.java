@@ -133,14 +133,15 @@ public class SleepmostCommand implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
 		        if (args.length < 1) return new ArrayList<>();
 
-		if (args.length == 1) {
-			//return the subcommands the player has permissions to execute
-			return this.subCommands.keySet().stream()
-					.filter(subCmd -> hasPermission(sender, subCmd))
-					.filter(subCmd -> subCmd.contains(args[0]) || subCmd.equalsIgnoreCase(args[0]))
-					.sorted()
-					.collect(toList());
-		}
+		        if (args.length == 1) {
+		            String prefix = args[0].toLowerCase(Locale.ROOT);
+		            //return the subcommands the player has permissions to execute
+		            return this.subCommands.keySet().stream()
+		                    .filter(subCmd -> hasPermission(sender, subCmd))
+		                    .filter(subCmd -> subCmd.startsWith(prefix))
+		                    .sorted()
+		                    .collect(toList());
+		        }
 
 		String cmdName = this.subCommands.keySet().stream()
 				.filter(subCmd -> subCmd.equalsIgnoreCase(args[0]))

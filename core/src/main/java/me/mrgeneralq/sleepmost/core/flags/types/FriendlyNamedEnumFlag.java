@@ -25,9 +25,15 @@ public abstract class FriendlyNamedEnumFlag<T extends FriendlyNamed> extends Tab
 
     @Override
     public List<String> tabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, List<String> args) {
+        if (args.isEmpty()) {
+            return Arrays.stream(enumValues)
+                    .map(FriendlyNamed::friendlyName)
+                    .collect(Collectors.toList());
+        }
+        String prefix = args.get(0).toLowerCase(java.util.Locale.ROOT);
         return Arrays.stream(enumValues)
                 .map(FriendlyNamed::friendlyName)
-                .filter(it -> it.contains(args.get(0)) || it.equalsIgnoreCase(args.get(0)))
+                .filter(it -> it.toLowerCase(java.util.Locale.ROOT).startsWith(prefix))
                 .collect(Collectors.toList());
     }
 

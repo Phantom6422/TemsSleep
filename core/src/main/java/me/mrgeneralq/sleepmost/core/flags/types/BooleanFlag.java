@@ -22,8 +22,12 @@ public abstract class BooleanFlag extends TabCompletedFlag<Boolean> {
 
     @Override
     public List<String> tabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, List<String> args) {
+        if (args.isEmpty()) {
+            return new ArrayList<>(convertToArrayList(new String[]{"true", "false"}));
+        }
+        String prefix = args.get(0).toLowerCase(java.util.Locale.ROOT);
         return new ArrayList<>(convertToArrayList(new String[]{"true", "false"}))
-                .stream().filter(it -> it.contains(args.get(0)) || it.equalsIgnoreCase(args.get(0)))
+                .stream().filter(it -> it.toLowerCase(java.util.Locale.ROOT).startsWith(prefix))
                 .collect(Collectors.toList());
     }
 }

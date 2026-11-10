@@ -68,11 +68,12 @@ public class ResetFlagSubCommand implements ISubCommand
 
 	@Override
 	public List<String> tabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, List<String> args) {
-		if (args.size() == 1) {
-			return this.flagsRepository.getFlagsNames().stream()
-					.filter(flag -> flag.contains(args.get(0)) || flag.equalsIgnoreCase(args.get(0)))
-					.collect(Collectors.toList());
-		}
+		        if (args.size() == 1) {
+		            String prefix = args.get(0).toLowerCase(java.util.Locale.ROOT);
+		            return this.flagsRepository.getFlagsNames().stream()
+		                    .filter(flag -> flag.toLowerCase(java.util.Locale.ROOT).startsWith(prefix))
+		                    .collect(Collectors.toList());
+		        }
 
 		if (args.size() == 2) {
 			ISleepFlag<?> flag = flagsRepository.getFlags().stream()
