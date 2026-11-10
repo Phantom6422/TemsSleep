@@ -150,9 +150,10 @@ public class NightcycleAnimationTask extends BukkitRunnable {
 
         for(Player p: playerList){
             if (p.isOnline()) {
-                // No fade: the title is replaced every couple of ticks, so it stays
-                // visually continuous instead of fading in/out on each update.
-                p.sendTitle(clockTitle, clockSubTitle, 0, 20, 0);
+                // Keep a short fade-out: a 10-tick hold with a 4-tick fade is
+                // quick enough not to strobe while the clock refreshes every
+                // couple of ticks.
+                p.sendTitle(clockTitle, clockSubTitle, 0, 10, 4);
             }
         }
     }
