@@ -20,7 +20,6 @@ import org.bukkit.event.Listener;
 
 import me.mrgeneralq.sleepmost.core.enums.SleepSkipCause;
 import me.mrgeneralq.sleepmost.core.events.SleepSkipEvent;
-import me.mrgeneralq.sleepmost.core.statics.DataContainer;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +33,6 @@ public class SleepSkipEventListener implements Listener {
     private final IFlagsRepository flagsRepository;
     private final IBossBarService bossBarService;
     private final IHookService hookService;
-    private final DataContainer dataContainer = DataContainer.getContainer();
 
     public SleepSkipEventListener(IMessageService messageService,
                                   IConfigService configService,
@@ -62,9 +60,6 @@ public class SleepSkipEventListener implements Listener {
         if (cause != NIGHT_TIME && cause != SleepSkipCause.STORM) {
             return;
         }
-
-        if (dataContainer.isAnimationRunningAt(world))
-            return;
 
         /*
         * Decide which players should be phantom reset when the night skips

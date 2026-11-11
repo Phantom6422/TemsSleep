@@ -1,6 +1,6 @@
 # WELCOME TO TEMSSLEEP
 # BASED ON SLEEP-MOST BY MRGENERALQ AND CONTRIBUTORS
-# VERSION: ${project.version}
+# VERSION: 5.9.3
 # SUPPORT AND DOCS: https://github.com/Phantom6422/TemsSleep
 # RELEASES: https://github.com/Phantom6422/TemsSleep/releases
 #
@@ -85,9 +85,9 @@ sleep:
 # specify the time which the world will be set after reset
 time-after-reset: 0
 
-# configure when players can and cannot sleep
-# this also controls when the animation will stop
-# please note that this does not
+# Configure when players can start sleeping.
+# The night animation itself always runs until dawn (6:00 AM), even when
+# night-end is earlier.
 time:
   night-start: 12542
   night-end: 23850

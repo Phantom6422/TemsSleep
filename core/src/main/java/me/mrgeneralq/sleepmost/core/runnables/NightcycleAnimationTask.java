@@ -24,6 +24,13 @@ public class NightcycleAnimationTask extends BukkitRunnable {
      */
     private static final int CLOCK_TITLE_INTERVAL_TICKS = 2;
 
+    /**
+     * Dawn is the end of the night animation. The sleep window can end a little
+     * earlier (config time.night-end), but the animation should visually run all
+     * the way to 6:00 rather than jumping from ~5:30 to morning.
+     */
+    private static final int ANIMATION_DAWN_TIME = 24000;
+
     private final ISleepService sleepService;
     private final DataContainer dataContainer = DataContainer.getContainer();
     private final ISleepMostWorldService sleepMostWorldService;
@@ -93,7 +100,7 @@ public class NightcycleAnimationTask extends BukkitRunnable {
             return;
         }
 
-        final boolean night = sleepService.isNight(world);
+        final boolean night = isAnimationNight(world);
 
         //CANCEL iF animation is no longer supposed to run
         if(!this.flagsRepository.getForceNightcycleAnimationFlag().getValueAt(world) && night){
@@ -131,6 +138,16 @@ public class NightcycleAnimationTask extends BukkitRunnable {
                 && (this.iterationCount == 1 || this.iterationCount % CLOCK_TITLE_INTERVAL_TICKS == 0)){
             sendTitles((int) world.getTime());
         }
+    }
+
+    private boolean isAnimationNight(World world) {
+        // A night skip must run through dawn even when the configurable sleep
+        // window ends earlier (the default night-end is around 5:51 AM).
+        if (this.skipCause == SleepSkipCause.NIGHT_TIME) {
+            long time = world.getTime();
+            return time >= 12000 && time < ANIMATION_DAWN_TIME;
+        }
+        return this.sleepService.isNight(world);
     }
 
     private void sendTitles(int time) {

@@ -149,18 +149,25 @@ public class MessageService implements IMessageService {
 	public void sendNightSkippedMessage(List<OfflinePlayer> offlinePlayers,World world, String lastSleeperName, String lastSleeperDisplayName, SleepSkipCause cause) {
 		MessageKey message = (cause == SleepSkipCause.STORM ? MessageKey.STORM_SKIPPED : MessageKey.NIGHT_SKIPPED);
 
-		for(OfflinePlayer p: offlinePlayers.stream().filter(OfflinePlayer::isOnline).collect(Collectors.toList())){
+		        for(OfflinePlayer offlinePlayer: offlinePlayers){
 
-			String skipMessage = this.getMessage(message)
-					.setPlayer(p.getPlayer())
-					.setPlaceHolder("%last-sleeper%", lastSleeperName)
-					.setPlaceHolder("%dlast-sleeper%", lastSleeperDisplayName)
-					.setWorld(world)
-					.build();
+		            if(!offlinePlayer.isOnline())
+		                continue;
 
-			this.sendMessage(p.getPlayer() , skipMessage);
+		            Player onlinePlayer = offlinePlayer.getPlayer();
+		            if(onlinePlayer == null)
+		                continue;
 
-		}
+		            String skipMessage = this.getMessage(message)
+		                    .setPlayer(onlinePlayer)
+		                    .setPlaceHolder("%last-sleeper%", lastSleeperName)
+		                    .setPlaceHolder("%dlast-sleeper%", lastSleeperDisplayName)
+		                    .setWorld(world)
+		                    .build();
+
+		            this.sendMessage(onlinePlayer, skipMessage);
+
+		        }
 	}
 
 	@Override
