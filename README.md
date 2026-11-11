@@ -1,18 +1,22 @@
 # TemsSleep
 
-TemsSleep is a Paper sleep plugin for Minecraft **26.3**. It supports one-player
-sleep, configurable sleep percentages, night-skip animations, clock animations,
-boss bars, insomnia, AFK exemptions, GSit/PlaceholderAPI/SuperVanish hooks and
-more.
+TemsSleep is a Paper/Spigot sleep plugin for Minecraft **1.21+** (including
+**26.3**). It supports one-player sleep, configurable sleep percentages,
+night-skip animations, clock animations, boss bars, insomnia, AFK exemptions,
+GSit/PlaceholderAPI/SuperVanish hooks and more.
 
 > **Note:** This plugin is a rebranded fork of [SleepMost](https://www.spigotmc.org/resources/60623/)
 > by [MrGeneralQ](https://github.com/MrGeneralQ) and the SleepMost contributors.
-> This fork targets Paper 26.3 and is maintained by
-> [Phantom6422](https://github.com/Phantom6422).
+> This fork targets Paper/Spigot 1.21+ and is maintained by
+> [Phantom6422](https://github.com/Phantom6422) for
+> [PhantomsNetwork](https://phantomsnetwork.org) internal use. We do not provide
+> support for other servers.
 
 > [!WARNING]
-> **This plugin is heavily modified using AI / "vibe coding" methods.**
+> **This fork is maintained for [PhantomsNetwork](https://phantomsnetwork.org)
+> internal use only. We do not provide support for other servers.**
 >
+> **This plugin is heavily modified using AI / "vibe coding" methods.**
 > The Paper 26.3 port, rebrand, GitHub update checker, release automation,
 > command and permission changes, fixes and this documentation were produced with
 > an AI coding agent under human direction and review.
