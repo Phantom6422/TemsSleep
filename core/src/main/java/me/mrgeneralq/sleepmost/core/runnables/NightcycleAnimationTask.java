@@ -31,6 +31,9 @@ public class NightcycleAnimationTask extends BukkitRunnable {
      */
     private static final int ANIMATION_DAWN_TIME = 24000;
 
+    /** Minecraft starts brightening the sky around this time. */
+    private static final int SUNRISE_START_TIME = 23000;
+
     /**
      * After this time (~4:00 AM) a started night animation always finishes.
      * Stopping near dawn leaves the world at ~5:30, skips the final reset and
@@ -93,8 +96,14 @@ public class NightcycleAnimationTask extends BukkitRunnable {
             calculatedSpeed = Math.min((int) Math.round((additionalPlayersRatio * (maxSpeed - baseSpeed)) + baseSpeed), maxSpeed);
         }
 
+        final long currentTime = world.getTime();
+        final long nextTime = currentTime + calculatedSpeed;
+        final boolean reachesDawn = this.skipCause == SleepSkipCause.NIGHT_TIME
+                && nextTime >= ANIMATION_DAWN_TIME;
+
         try {
-            world.setTime(world.getTime() + calculatedSpeed);
+            // Land exactly on 6:00 rather than overshooting into the morning.
+            world.setTime(reachesDawn ? 0 : nextTime);
         } catch (RuntimeException exception) {
             // The world was unloaded while the task was queued.
             stopAnimation();
@@ -104,6 +113,11 @@ public class NightcycleAnimationTask extends BukkitRunnable {
         SleepMostWorld sleepMostWorld = this.sleepMostWorldService.getWorld(world);
         if (sleepMostWorld == null) {
             stopAnimation();
+            return;
+        }
+
+        if (reachesDawn) {
+            finishAnimation();
             return;
         }
 
@@ -125,18 +139,7 @@ public class NightcycleAnimationTask extends BukkitRunnable {
         }
 
         if(!night){
-            // Clear the animation flag BEFORE firing the skip event: the event
-            // listeners intentionally ignore skip events while an animation is
-            // running, and they need to process this final one.
-            stopAnimation();
-
-            this.sleepService.executeSleepReset(world, this.lastSleeperName, this.lastSleeperDisplayName, this.peopleWhoSlept, this.skipCause);
-
-            if(this.flagsRepository.getClockAnimationFlag().getValueAt(world)
-                    && ServerVersion.CURRENT_VERSION.supportsTitles()
-                    && this.skipCause == SleepSkipCause.NIGHT_TIME){
-                sendTitles(configService.getResetTime());
-            }
+            finishAnimation();
             return;
         }
 
@@ -145,9 +148,32 @@ public class NightcycleAnimationTask extends BukkitRunnable {
          ***************************************************/
 
         if(this.flagsRepository.getClockAnimationFlag().getValueAt(world)
+                && ServerVersion.CURRENT_VERSION.supportsTitles()){
+
+            final long time = world.getTime();
+            // Refresh every tick while the sky is actually brightening so the
+            // clock and the sunrise animation move together.
+            final int interval = time >= SUNRISE_START_TIME ? 1 : CLOCK_TITLE_INTERVAL_TICKS;
+
+            if (time >= SUNRISE_START_TIME
+                    || this.iterationCount == 1
+                    || this.iterationCount % interval == 0) {
+                sendTitles((int) time);
+            }
+        }
+    }
+
+    private void finishAnimation() {
+        // Clear the animation flags BEFORE firing the skip event: the event
+        // listeners need to process this final one.
+        stopAnimation();
+
+        this.sleepService.executeSleepReset(world, this.lastSleeperName, this.lastSleeperDisplayName, this.peopleWhoSlept, this.skipCause);
+
+        if(this.flagsRepository.getClockAnimationFlag().getValueAt(world)
                 && ServerVersion.CURRENT_VERSION.supportsTitles()
-                && (this.iterationCount == 1 || this.iterationCount % CLOCK_TITLE_INTERVAL_TICKS == 0)){
-            sendTitles((int) world.getTime());
+                && this.skipCause == SleepSkipCause.NIGHT_TIME){
+            sendTitles(configService.getResetTime());
         }
     }
 
