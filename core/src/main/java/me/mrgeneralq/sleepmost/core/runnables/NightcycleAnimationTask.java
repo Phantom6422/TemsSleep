@@ -31,6 +31,13 @@ public class NightcycleAnimationTask extends BukkitRunnable {
      */
     private static final int ANIMATION_DAWN_TIME = 24000;
 
+    /**
+     * After this time (~4:00 AM) a started night animation always finishes.
+     * Stopping near dawn leaves the world at ~5:30, skips the final reset and
+     * prevents the "Good morning" message.
+     */
+    private static final int COMMIT_TO_DAWN_TIME = 22000;
+
     private final ISleepService sleepService;
     private final DataContainer dataContainer = DataContainer.getContainer();
     private final ISleepMostWorldService sleepMostWorldService;
@@ -102,8 +109,12 @@ public class NightcycleAnimationTask extends BukkitRunnable {
 
         final boolean night = isAnimationNight(world);
 
-        //CANCEL iF animation is no longer supposed to run
-        if(!this.flagsRepository.getForceNightcycleAnimationFlag().getValueAt(world) && night){
+        // Cancel early only when the animation has not committed to dawn yet.
+        // Once a night animation is close to morning, finish it so the world is
+        // reset and the morning message is delivered.
+        if(!this.flagsRepository.getForceNightcycleAnimationFlag().getValueAt(world)
+                && night
+                && world.getTime() < COMMIT_TO_DAWN_TIME){
             if (requiredSleepers < 0) {
                 requiredSleepers = sleepService.getRequiredSleepersCount(world);
             }
@@ -124,7 +135,7 @@ public class NightcycleAnimationTask extends BukkitRunnable {
             if(this.flagsRepository.getClockAnimationFlag().getValueAt(world)
                     && ServerVersion.CURRENT_VERSION.supportsTitles()
                     && this.skipCause == SleepSkipCause.NIGHT_TIME){
-                sendTitles(0);
+                sendTitles(configService.getResetTime());
             }
             return;
         }

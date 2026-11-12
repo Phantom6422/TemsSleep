@@ -56,7 +56,7 @@ The shaded plugin is written to `target/TemsSleep-<version>.jar`.
 
 ## Releases and updates
 
-Releases are published from tags named `v<version>` (for example `v5.9.3`).
+Releases are published from tags named `v<version>` (for example `v5.9.4`).
 The plugin update checker reads the latest public GitHub release from
 `Phantom6422/TemsSleep` by default. Change
 `update-checker-github-repository` in `config.yml` if you use a different
