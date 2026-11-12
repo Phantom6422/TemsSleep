@@ -35,3 +35,6 @@ bin/*
 target/
 
 dependency-reduced-pom.xml
+
+# Local AI agent instructions (not part of the repository)
+AGENT.md
