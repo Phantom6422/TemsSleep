@@ -3,7 +3,7 @@ api-version: '1.21'
 version: 5.9.5
 main: me.mrgeneralq.sleepmost.core.Sleepmost
 description: One-player sleep, night skip animations and sleep utilities.
-authors: [MrGeneralQ, LesleyXYZ, HorrendousEntity, dubsector]
+authors: [Phantom6422, MrGeneralQ, LesleyXYZ, HorrendousEntity, dubsector]
 website: https://github.com/Phantom6422/TemsSleep
 commands:
   temssleep:

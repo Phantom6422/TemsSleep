@@ -69,7 +69,7 @@ public class PlayerJoinEventListener implements Listener {
 
     private void notifyNewUpdate(CommandSender sender) {
         sender.sendMessage(colorize("&b==============================================="));
-        sender.sendMessage(messageService.getMessagePrefixed("&bA newer version of &esleep-most &bis available: &e%latest-version%")
+        sender.sendMessage(messageService.getMessagePrefixed("&bA newer version of &eTemsSleep &bis available: &e%latest-version%")
                 .setPlaceHolder("%latest-version%", updateService.getCachedUpdateVersion())
                 .build());
         sender.sendMessage(ChatColor.GREEN + updateService.getUpdateUrl());

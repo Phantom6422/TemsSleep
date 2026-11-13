@@ -94,7 +94,7 @@ public class SleepmostCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			sender.sendMessage(colorize("&b*********************************************"));
-			sender.sendMessage(colorize("&b*&e  TEMSSLEEP &o&7author: MrGeneralQ  &b*"));
+			sender.sendMessage(colorize("&b*&e  TEMSSLEEP &o&7maintained by Phantom6422  &b*"));
 			sender.sendMessage(colorize("&b*********************************************"));
 			sender.sendMessage(colorize("&e/ts &fshow a list of available commands"));
 			sender.sendMessage(colorize("&e/ts enable &fenable TemsSleep in the current world"));

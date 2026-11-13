@@ -175,7 +175,7 @@ public class SleepService implements ISleepService {
         if(flagsRepository.getUseExemptFlag().getValueAt(world)){
             filteredPlayers = filteredPlayers.stream().filter(p -> !p.hasPermission("temssleep.exempt") && !p.hasPermission("sleepmost.exempt")).collect(Collectors.toList());
             if (debug) {
-                this.debugService.print(String.format("&f[&b%s&f] &fMissing bypass permission (sleepmost.exempt) players [&e%s&f]: %s", world.getName(), playersList.size(), getJoinedStream(playersList, filteredPlayers)));
+                this.debugService.print(String.format("&f[&b%s&f] &fMissing bypass permission (temssleep.exempt) players [&e%s&f]: %s", world.getName(), playersList.size(), getJoinedStream(playersList, filteredPlayers)));
             }
         }
 
