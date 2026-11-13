@@ -1,5 +1,5 @@
 name: TemsSleep
-version: '5.9.5'
+version: '5.9.6'
 main: me.mrgeneralq.sleepmost.core.Sleepmost
 api-version: '1.21'
 description: One-player sleep, night skip animations and sleep utilities for Paper servers.
