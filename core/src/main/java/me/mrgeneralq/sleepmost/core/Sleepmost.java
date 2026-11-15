@@ -181,6 +181,9 @@ public class Sleepmost extends JavaPlugin {
 		Bootstrapper.reset();
 		this.bootstrapper = null;
 		this.messageService = null;
+		for (IPlatformModule module : this.platformModules) {
+			module.unregisterCommand();
+		}
 		this.platformModules.clear();
 		instance = null;
 	}
@@ -223,7 +226,8 @@ public class Sleepmost extends JavaPlugin {
 
 	private void notifyIfNewUpdateExists(IUpdateService updateService)
 	{
-		if (!isEnabled()) {
+		if (!isEnabled() || this.bootstrapper == null
+				|| !this.bootstrapper.getConfigService().updateCheckerEnabled()) {
 			return;
 		}
 		try {

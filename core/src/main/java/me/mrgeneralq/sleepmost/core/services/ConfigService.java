@@ -51,6 +51,7 @@ public class ConfigService implements IConfigService {
             return Set.of();
         }
         return sleepSection.getKeys(false).stream()
+                .filter(name -> sleepSection.getBoolean(name + ".enabled", false))
                 .map(Bukkit::getWorld)
                 .filter(Objects::nonNull)
                 .collect(toSet());

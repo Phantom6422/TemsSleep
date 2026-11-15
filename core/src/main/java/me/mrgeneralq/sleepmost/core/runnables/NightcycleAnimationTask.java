@@ -95,10 +95,39 @@ public class NightcycleAnimationTask extends BukkitRunnable {
             calculatedSpeed = Math.min((int) Math.round((additionalPlayersRatio * (maxSpeed - baseSpeed)) + baseSpeed), maxSpeed);
         }
 
+        final boolean night = isAnimationNight(world);
+
+        // A daytime storm skip should not advance the clock. Finish it before
+        // touching the world time.
+        if(!night){
+            finishAnimation();
+            return;
+        }
+
+        SleepMostWorld sleepMostWorld = this.sleepMostWorldService.getWorld(world);
+        if (sleepMostWorld == null) {
+            stopAnimation();
+            return;
+        }
+
         final long currentTime = world.getTime();
         final long nextTime = currentTime + calculatedSpeed;
         final boolean reachesDawn = this.skipCause == SleepSkipCause.NIGHT_TIME
                 && nextTime >= ANIMATION_DAWN_TIME;
+
+        // Cancel early only when the animation has not committed to dawn yet.
+        // This check must run before setTime(), otherwise a cancelled animation
+        // still pushes the night forward by one speed step.
+        if(!this.flagsRepository.getForceNightcycleAnimationFlag().getValueAt(world)
+                && currentTime < COMMIT_TO_DAWN_TIME){
+            if (requiredSleepers < 0) {
+                requiredSleepers = sleepService.getRequiredSleepersCount(world);
+            }
+            if (sleepService.getSleepersAmount(world) < requiredSleepers) {
+                stopAnimation();
+                return;
+            }
+        }
 
         try {
             // Land exactly on 6:00 rather than overshooting into the morning.
@@ -109,35 +138,7 @@ public class NightcycleAnimationTask extends BukkitRunnable {
             return;
         }
 
-        SleepMostWorld sleepMostWorld = this.sleepMostWorldService.getWorld(world);
-        if (sleepMostWorld == null) {
-            stopAnimation();
-            return;
-        }
-
         if (reachesDawn) {
-            finishAnimation();
-            return;
-        }
-
-        final boolean night = isAnimationNight(world);
-
-        // Cancel early only when the animation has not committed to dawn yet.
-        // Once a night animation is close to morning, finish it so the world is
-        // reset and the morning message is delivered.
-        if(!this.flagsRepository.getForceNightcycleAnimationFlag().getValueAt(world)
-                && night
-                && world.getTime() < COMMIT_TO_DAWN_TIME){
-            if (requiredSleepers < 0) {
-                requiredSleepers = sleepService.getRequiredSleepersCount(world);
-            }
-            if (sleepService.getSleepersAmount(world) < requiredSleepers) {
-                stopAnimation();
-                return;
-            }
-        }
-
-        if(!night){
             finishAnimation();
             return;
         }

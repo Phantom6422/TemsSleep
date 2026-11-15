@@ -1,5 +1,5 @@
 name: TemsSleep
-version: '6.0.2'
+version: '${project.version}'
 main: me.mrgeneralq.sleepmost.core.Sleepmost
 # Paper/Purpur 26.x only. Older servers refuse to load this plugin.
 api-version: '26.1'
@@ -120,6 +120,7 @@ permissions:
     default: op
     children:
       temssleep.*: true
+      sleepmost.exempt: true
   sleepmost.exempt:
     description: Legacy alias for temssleep.exempt
     default: false

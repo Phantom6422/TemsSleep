@@ -50,7 +50,7 @@ server's `plugins/` directory, start the server and edit the generated configura
 - Paper **26.x** (26.1.1+) and Purpur **26.x** (26.1.1+) are supported from the same shaded jar.
 - A future **27.x+** server is detected, but this build disables itself with a clear message until it has
   been validated against that API.
-- Spigot and Bukkit are **not** supported. The plugin is a Paper plugin (`paper-plugin.yml`, API 26.3) and
+- Spigot and Bukkit are **not** supported. The plugin is a Paper plugin (`paper-plugin.yml`, API 26.1) and
   will not load on a Bukkit/Spigot server.
 - Folia is not officially supported because TemsSleep uses the global Bukkit scheduler.
 - On Purpur, the native AFK API (`Player#isAfk`) is used automatically for the `use-afk` exemption. On
@@ -93,7 +93,7 @@ The primary permission nodes are `temssleep.*` (for example `temssleep.setflag`,
 
 ## Releases and updates
 
-Releases are published from tags named `v<version>` (for example `v6.0.2`). The plugin update checker reads
+Releases are published from tags named `v<version>` (for example `v6.0.3`). The plugin update checker reads
 the latest public GitHub release from `Phantom6422/TemsSleep` by default. Change
 `update-checker-github-repository` in `config.yml` if you use a different repository.
 
@@ -104,7 +104,7 @@ mvn clean package -pl paper -am
 ```
 
 Requires JDK 25 or newer; the produced bytecode targets Java 21. The build compiles against the Paper
-API for Minecraft 26.3. The shaded plugin is written to `target/TemsSleep-<version>.jar`.
+API for Minecraft 26.1. The shaded plugin is written to `target/TemsSleep-<version>.jar`.
 
 ## Special thanks
 

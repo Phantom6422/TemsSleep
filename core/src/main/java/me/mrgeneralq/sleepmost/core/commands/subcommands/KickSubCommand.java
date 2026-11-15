@@ -38,18 +38,6 @@ public class KickSubCommand implements ISubCommand {
         }
 
         Player player = (Player) sender;
-        World world = player.getWorld();
-
-
-        boolean kickingEnabled = this.flagsRepository.getAllowKickFlag().getValueAt(world);
-
-        if(!kickingEnabled){
-            MessageBuilder kickNotAllowedMsg = this.messageService.getMessagePrefixed(MessageKey.KICKING_NOT_ALLOWED)
-                    .setWorld(world);
-
-            this.messageService.sendMessage(player , kickNotAllowedMsg.build());
-            return true;
-        }
 
         if(args.length < 2){
             this.messageService.sendMessage(sender, messageService.getMessagePrefixed(MessageKey.SPECIFY_PLAYER).build());
@@ -58,14 +46,25 @@ public class KickSubCommand implements ISubCommand {
 
         String targetPlayerName = args[1];
 
-        if(Bukkit.getPlayerExact(targetPlayerName) == null){
+        Player targetPlayer = Bukkit.getPlayerExact(targetPlayerName);
+
+        if(targetPlayer == null){
             this.messageService.sendMessage(sender, messageService.getMessagePrefixed(MessageKey.TARGET_NOT_ONLINE)
                     .setPlayer(player)
                     .build());
             return true;
         }
 
-        Player targetPlayer = Bukkit.getPlayerExact(targetPlayerName);
+        // Kicking is controlled per world; read the target's world, not the
+        // sender's, so a player in a kick-enabled world cannot kick a sleeper
+        // in a world where kicking is disabled.
+        World targetWorld = targetPlayer.getWorld();
+        if(!this.flagsRepository.getAllowKickFlag().getValueAt(targetWorld)){
+            MessageBuilder kickNotAllowedMsg = this.messageService.getMessagePrefixed(MessageKey.KICKING_NOT_ALLOWED)
+                    .setWorld(targetWorld);
+            this.messageService.sendMessage(player, kickNotAllowedMsg.build());
+            return true;
+        }
 
         if(!this.sleepService.isPlayerAsleep(targetPlayer)){
             this.messageService.sendMessage(sender, messageService.getMessagePrefixed(MessageKey.TARGET_NOT_SLEEPING)

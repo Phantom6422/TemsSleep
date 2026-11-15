@@ -22,8 +22,8 @@ public enum ServerVersion
 
     public static final String MINIMUM_SUPPORTED_VERSION = "26.1.1";
 
-    private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)");
-    private static final Pattern MC_VERSION_PATTERN = Pattern.compile("MC:\\s*(\\d+)\\.(\\d+)");
+    private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)(?:\\.(\\d+))?");
+    private static final Pattern MC_VERSION_PATTERN = Pattern.compile("MC:\\s*(\\d+)\\.(\\d+)(?:\\.(\\d+))?");
 
     public static final ServerVersion CURRENT_VERSION;
 
@@ -83,16 +83,18 @@ public enum ServerVersion
 
         final int major;
         final int minor;
+        final int patch;
         try {
             major = Integer.parseInt(matcher.group(1));
             minor = Integer.parseInt(matcher.group(2));
+            patch = matcher.group(3) == null ? 0 : Integer.parseInt(matcher.group(3));
         } catch (NumberFormatException ignored) {
             return UNKNOWN;
         }
 
         // The 26.x line starts at 26.1.1. Every 26.x release uses the same
         // tested API family; newer major releases are detected but not enabled.
-        if (major == 26 && minor >= 1) {
+        if (major == 26 && (minor > 1 || (minor == 1 && patch >= 1))) {
             return V26_X;
         }
         return major > 26 ? NEWER : UNKNOWN;

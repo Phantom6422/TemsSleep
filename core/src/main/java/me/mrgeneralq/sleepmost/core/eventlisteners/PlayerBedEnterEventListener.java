@@ -8,8 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import io.papermc.paper.block.bed.BedEnterAction;
+import io.papermc.paper.block.bed.BedEnterProblem;
 import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 
 public class PlayerBedEnterEventListener implements Listener {
 
@@ -45,22 +46,32 @@ public class PlayerBedEnterEventListener implements Listener {
         }
 
         /*
-         * Vanilla reports why entering the bed failed (monsters nearby, daytime,
-         * obstruction, wrong dimension, ...). The event is usually already
-         * cancelled in that case, but we still want to notify the player and make
-         * sure TemsSleep never counts a failed bed entry as sleeping.
+         * A bed interaction can be a sleep attempt or only a respawn-point
+         * update (for example during the day). Do not cancel the latter:
+         * cancelling PlayerBedEnterEvent prevents the whole bed interaction,
+         * including setting the player's spawn.
          */
-        BedEnterResult result = e.getBedEnterResult();
-        if (result != BedEnterResult.OK) {
-            this.sendCannotSleepMessage(player, world, result);
-            e.setCancelled(true);
+        BedEnterAction action = e.enterAction();
+        if (e.isCancelled()) {
             if (this.sleepService.isPlayerAsleep(player)) {
                 this.sleepService.setSleeping(player, false);
             }
             return;
         }
-
-        if (e.isCancelled()) {
+        if (action.problem() != null) {
+            this.sendCannotSleepMessage(player, world, action.problem());
+            if (this.sleepService.isPlayerAsleep(player)) {
+                this.sleepService.setSleeping(player, false);
+            }
+            return;
+        }
+        if (!action.canSleep().success()) {
+            // Daytime or another non-sleepable situation. Vanilla may still
+            // allow setting the respawn point, so leave the event alone and
+            // never count the player as sleeping.
+            if (this.sleepService.isPlayerAsleep(player)) {
+                this.sleepService.setSleeping(player, false);
+            }
             return;
         }
 
@@ -123,8 +134,8 @@ public class PlayerBedEnterEventListener implements Listener {
         this.sleepService.setSleeping(player , true);
     }
 
-    private void sendCannotSleepMessage(Player player, World world, BedEnterResult result) {
-        MessageKey key = result == BedEnterResult.NOT_SAFE
+    private void sendCannotSleepMessage(Player player, World world, BedEnterProblem problem) {
+        MessageKey key = problem == BedEnterProblem.NOT_SAFE
                 ? MessageKey.SLEEP_UNSAFE
                 : MessageKey.CANNOT_SLEEP_NOW;
 

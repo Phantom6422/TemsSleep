@@ -3,7 +3,6 @@ package me.mrgeneralq.sleepmost.core.eventlisteners.hooks;
 import dev.geco.gsit.api.event.PlayerPoseEvent;
 import dev.geco.gsit.api.event.PlayerStopPoseEvent;
 import dev.geco.gsit.model.Pose;
-import dev.geco.gsit.model.PoseType;
 import me.mrgeneralq.sleepmost.core.enums.MessageKey;
 import me.mrgeneralq.sleepmost.core.interfaces.*;
 import me.mrgeneralq.sleepmost.core.models.SleepMostWorld;
@@ -54,7 +53,11 @@ public class GSitEventListener implements Listener {
         if(!this.flagsRepository.getGSitSleepFlag().getValueAt(world))
             return;
 
-        if(pose.getPoseType() != PoseType.LAY && pose.getPoseType() != PoseType.LAY_BACK)
+        // GSit 3.6.0 renamed LAY_BACK to LEGS_UP. Compare names so the hook
+        // works with both older and newer GSit versions without a hard link to
+        // the removed enum constant.
+        String poseName = pose.getPoseType().name();
+        if(!"LAY".equals(poseName) && !"LAY_BACK".equals(poseName) && !"LEGS_UP".equals(poseName))
             return;
 
         if(!this.sleepService.isSleepingPossible(world))

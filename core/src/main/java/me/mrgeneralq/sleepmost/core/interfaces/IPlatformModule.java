@@ -21,4 +21,12 @@ public interface IPlatformModule {
     default void registerCommand(Plugin plugin, String name, List<String> aliases,
                                  CommandExecutor executor, TabCompleter completer) {
     }
+
+    /**
+     * Removes the command registered by {@link #registerCommand}. Called during
+     * plugin disable so a reload can register a fresh command instead of keeping
+     * a command that points at the old plugin instance/class loader.
+     */
+    default void unregisterCommand() {
+    }
 }

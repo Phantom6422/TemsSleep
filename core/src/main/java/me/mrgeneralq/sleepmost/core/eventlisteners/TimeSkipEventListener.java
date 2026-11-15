@@ -20,7 +20,10 @@ public class TimeSkipEventListener implements Listener {
             return;
         }
 
-        if (isNightSkip(event)) {
+        // Only take over the skip when TemsSleep actually has tracked sleepers
+        // to process. Otherwise the plugin would cancel vanilla forever and
+        // leave the world stuck at night.
+        if (isNightSkip(event) && this.sleepService.getSleepersAmount(event.getWorld()) > 0) {
             event.setCancelled(true);
         }
     }

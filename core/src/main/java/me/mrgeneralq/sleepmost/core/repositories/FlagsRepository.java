@@ -125,12 +125,12 @@ public class FlagsRepository implements IFlagsRepository {
 
     @Override
     public ISleepFlag<?> getFlag(String flagName) {
-        return this.flagByName.get(flagName);
+        return flagName == null ? null : this.flagByName.get(flagName.toLowerCase(java.util.Locale.ROOT));
     }
 
     @Override
     public boolean flagExists(String flagName) {
-        return this.flagByName.containsKey(flagName);
+        return flagName != null && this.flagByName.containsKey(flagName.toLowerCase(java.util.Locale.ROOT));
     }
 
     @Override

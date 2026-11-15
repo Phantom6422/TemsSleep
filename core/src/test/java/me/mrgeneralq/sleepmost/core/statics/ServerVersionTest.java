@@ -32,6 +32,9 @@ public class ServerVersionTest {
         assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("1.20.6-R0.1-SNAPSHOT"));
         assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("1.21.11-R0.1-SNAPSHOT"));
         assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("26.0-R0.1-SNAPSHOT"));
+        // 26.1.0 and bare 26.1 are below the 26.1.1 minimum.
+        assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("26.1-R0.1-SNAPSHOT"));
+        assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("26.1.0-R0.1-SNAPSHOT"));
     }
 
     @Test

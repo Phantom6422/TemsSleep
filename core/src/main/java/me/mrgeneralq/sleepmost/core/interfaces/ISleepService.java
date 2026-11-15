@@ -40,5 +40,5 @@ public interface ISleepService
 
     boolean shouldSkip(World world);
 
-    void runSkipAnimation(Player player, SleepSkipCause sleepSkipCause);
+    void runSkipAnimation(World world, Player lastSleeper, SleepSkipCause sleepSkipCause);
 }

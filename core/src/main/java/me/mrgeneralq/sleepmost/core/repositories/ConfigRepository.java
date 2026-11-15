@@ -59,12 +59,12 @@ public class ConfigRepository implements IConfigRepository
         main.getConfig().set(getFlagValuePath("percentage-required", worldName), 0.5);
         main.getConfig().set(getFlagValuePath("players-required", worldName), 5);
         main.getConfig().set(getFlagValuePath("mob-no-target", worldName), true);
-        main.getConfig().set(getFlagValuePath("use-exempt", worldName), true);
+        main.getConfig().set(getFlagValuePath("use-exempt", worldName), false);
         main.getConfig().set(getFlagValuePath("use-afk", worldName), false);
         main.getConfig().set(getFlagValuePath("prevent-sleep", worldName), false);
         main.getConfig().set(getFlagValuePath("prevent-phantom", worldName), false);
         main.getConfig().set(getFlagValuePath("nightcycle-animation", worldName), false);
-        main.getConfig().set(getFlagValuePath("storm-sleep", worldName), false);
+        main.getConfig().set(getFlagValuePath("storm-sleep", worldName), true);
         main.getConfig().set(getFlagValuePath("skip-delay", worldName), 0);
         main.getConfig().set(getFlagValuePath("heal", worldName), false);
         main.getConfig().set(getFlagValuePath("feed", worldName), false);

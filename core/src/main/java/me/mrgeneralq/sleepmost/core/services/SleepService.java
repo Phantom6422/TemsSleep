@@ -98,7 +98,15 @@ public class SleepService implements ISleepService {
 
     @Override
     public int getSleepersAmount(World world) {
-        return this.dataContainer.getSleepingCount(world);
+        // Exempt/AFK/invisible players must not count toward the sleepers
+        // either, otherwise a single exempt sleeper can satisfy the reduced
+        // requirement for everyone else.
+        Set<UUID> countedPlayers = getCountedPlayers(world).stream()
+                .map(Player::getUniqueId)
+                .collect(Collectors.toSet());
+        return (int) getSleepers(world).stream()
+                .filter(player -> countedPlayers.contains(player.getUniqueId()))
+                .count();
     }
 
     @Override
@@ -108,6 +116,11 @@ public class SleepService implements ISleepService {
 
     @Override
     public int getPlayerCountInWorld(World world) {
+        int playerCount = getCountedPlayers(world).size();
+        return playerCount == 0 ? 1 : playerCount;
+    }
+
+    private List<Player> getCountedPlayers(World world) {
 
         List<Player> playersList = world.getPlayers();
         List<Player> filteredPlayers = playersList;
@@ -199,16 +212,13 @@ public class SleepService implements ISleepService {
              }
          }
 
-         int playerCount = filteredPlayers.size();
-         int endResult = playerCount == 0 ? 1 : playerCount;
-
         if (debug) {
-            this.debugService.print(String.format("&f[&b%s&f] &fCalculated end TOTAL [&e%s&f]: %s", world.getName(), endResult, getJoinedStream(playersList, filteredPlayers)));
+            this.debugService.print(String.format("&f[&b%s&f] &fCounted players [&e%s&f]: %s", world.getName(), filteredPlayers.size(), getJoinedStream(playersList, filteredPlayers)));
             this.debugService.print("=============================");
             this.debugService.print("");
         }
 
-        return endResult;
+        return filteredPlayers;
     }
 
     @Override
@@ -329,9 +339,7 @@ public class SleepService implements ISleepService {
     }
 
     @Override
-    public void runSkipAnimation(Player player, SleepSkipCause sleepSkipCause) {
-        World world = player.getWorld();
-
+    public void runSkipAnimation(World world, Player lastSleeper, SleepSkipCause sleepSkipCause) {
         SleepMostWorld sleepMostWorld = this.sleepMostWorldService.getWorld(world);
         if (sleepMostWorld == null) {
             return;
@@ -348,7 +356,7 @@ public class SleepService implements ISleepService {
         this.dataContainer.setAnimationRunningAt(world, true);
         sleepMostWorld.setTimeCycleAnimationIsRunning(true);
 
-        new NightcycleAnimationTask(this, this.flagsRepository, world, player, sleepingPlayers , sleepSkipCause, sleepMostWorldService, messageService, configService).runTaskTimer(this.main, 0, 1);
+        new NightcycleAnimationTask(this, this.flagsRepository, world, lastSleeper, sleepingPlayers , sleepSkipCause, sleepMostWorldService, messageService, configService).runTaskTimer(this.main, 0, 1);
     }
 
     private void refreshTimeSettings() {

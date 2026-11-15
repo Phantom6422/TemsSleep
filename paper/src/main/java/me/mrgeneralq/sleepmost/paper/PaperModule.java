@@ -23,6 +23,8 @@ import java.util.Locale;
  */
 public class PaperModule implements IPlatformModule {
 
+    private Command registeredCommand;
+
     @Override
     public void setup() {
         // Paper and Purpur need no platform-specific bootstrap.
@@ -52,5 +54,15 @@ public class PaperModule implements IPlatformModule {
         };
 
         commandMap.register(plugin.getName().toLowerCase(Locale.ROOT), command);
+        this.registeredCommand = command;
+    }
+
+    @Override
+    public void unregisterCommand() {
+        if (this.registeredCommand == null) {
+            return;
+        }
+        this.registeredCommand.unregister(Bukkit.getServer().getCommandMap());
+        this.registeredCommand = null;
     }
 }

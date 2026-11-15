@@ -216,6 +216,9 @@ public class MessageService implements IMessageService {
 				this.createMessage(message);
 			}
 			this.messageRepository.saveConfig();
+			// On a fresh install the prefix is created by createMissingMessages(),
+			// after the constructor's initial loadPrefix() call.
+			loadPrefix();
 	}
 
 	@Override

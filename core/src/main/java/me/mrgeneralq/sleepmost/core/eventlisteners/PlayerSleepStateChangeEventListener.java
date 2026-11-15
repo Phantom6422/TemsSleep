@@ -115,7 +115,7 @@ public class PlayerSleepStateChangeEventListener implements Listener {
             }
             //if animation is enabled, run animation instead
             if (this.flagsRepository.getNightcycleAnimationFlag().getValueAt(world)) {
-                this.sleepService.runSkipAnimation(player, skipCause);
+                this.sleepService.runSkipAnimation(world, player, skipCause);
                 return;
             }
 
