@@ -64,7 +64,15 @@ public class Sleepmost extends JavaPlugin {
 		}
 
 		instance = this;
-		getLogger().info("Detected " + ServerPlatform.get().getDisplayName() + " " + currentVersion.getName());
+		String detectedVersion = Bukkit.getMinecraftVersion();
+		if (detectedVersion == null || detectedVersion.isBlank()) {
+			detectedVersion = currentVersion.getName();
+		}
+		getLogger().info("Detected " + ServerPlatform.get().getDisplayName() + " " + detectedVersion);
+		if (currentVersion.isNewerThanTested()) {
+			getLogger().warning("TemsSleep was tested on " + ServerVersion.MINIMUM_SUPPORTED_VERSION
+					+ "; this server is newer and may introduce API changes. Please report any issues.");
+		}
 		saveDefaultConfig();
 
 		//init metrics

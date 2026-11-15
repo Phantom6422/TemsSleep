@@ -48,6 +48,8 @@ server's `plugins/` directory, start the server and edit the generated configura
 ## Considerations
 
 - Paper **26.3+** and Purpur **26.3+** are supported from the same shaded jar.
+- Newer major releases are accepted and load with a startup warning, but only **26.3** is currently tested.
+  Future Paper API changes may require a plugin update.
 - Spigot and Bukkit are **not** supported. The plugin is a Paper plugin (`paper-plugin.yml`, API 26.3) and
   will not load on a Bukkit/Spigot server.
 - Folia is not officially supported because TemsSleep uses the global Bukkit scheduler.
@@ -91,7 +93,7 @@ The primary permission nodes are `temssleep.*` (for example `temssleep.setflag`,
 
 ## Releases and updates
 
-Releases are published from tags named `v<version>` (for example `v6.0.0`). The plugin update checker reads
+Releases are published from tags named `v<version>` (for example `v6.0.1`). The plugin update checker reads
 the latest public GitHub release from `Phantom6422/TemsSleep` by default. Change
 `update-checker-github-repository` in `config.yml` if you use a different repository.
 

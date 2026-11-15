@@ -8,13 +8,17 @@ import java.util.regex.Pattern;
 /**
  * Runtime Minecraft version detection.
  * <p>
- * TemsSleep only supports Paper and Purpur 26.3 and newer. Anything older is
+ * TemsSleep supports Paper and Purpur 26.3 and newer. Anything older is
  * reported as {@link #UNKNOWN}; the plugin then disables itself instead of
  * running against a partially supported API.
+ * <p>
+ * Later 26.x releases keep the tested API family ({@link #V26_3}). A newer
+ * major release is accepted as {@link #NEWER} so the plugin can still load,
+ * but it is logged as untested because future Paper APIs may change.
  */
 public enum ServerVersion
 {
-    UNKNOWN, V26_3;
+    UNKNOWN, V26_3, NEWER;
 
     public static final String MINIMUM_SUPPORTED_VERSION = "26.3";
 
@@ -31,7 +35,13 @@ public enum ServerVersion
 
     ServerVersion() {
         String enumName = name();
-        this.name = "UNKNOWN".equals(enumName) ? "unknown" : enumName.substring(1).replace('_', '.');
+        if ("UNKNOWN".equals(enumName)) {
+            this.name = "unknown";
+        } else if ("NEWER".equals(enumName)) {
+            this.name = "newer";
+        } else {
+            this.name = enumName.substring(1).replace('_', '.');
+        }
     }
 
     public String getName() {
@@ -39,7 +49,15 @@ public enum ServerVersion
     }
 
     public boolean isSupported() {
-        return this == V26_3;
+        return this == V26_3 || this == NEWER;
+    }
+
+    /**
+     * @return true when the server is newer than the version TemsSleep was
+     *         tested against (26.3)
+     */
+    public boolean isNewerThanTested() {
+        return this == NEWER;
     }
 
     /**
@@ -47,7 +65,8 @@ public enum ServerVersion
      * {@code 26.3.build.248-stable} or {@code git-Paper-123 (MC: 26.3)}.
      *
      * @param rawVersion raw version string, may be {@code null}
-     * @return {@link #V26_3} for supported versions, otherwise {@link #UNKNOWN}
+     * @return {@link #V26_3} for 26.3-26.x, {@link #NEWER} for newer major
+     *         releases, otherwise {@link #UNKNOWN}
      */
     public static ServerVersion parse(String rawVersion) {
         if (rawVersion == null || rawVersion.isEmpty()) {
@@ -72,8 +91,11 @@ public enum ServerVersion
         }
 
         // 26.3 is the minimum supported release. Later 26.x releases keep the
-        // same API family; anything else is deliberately unsupported.
-        return major == 26 && minor >= 3 ? V26_3 : UNKNOWN;
+        // same API family; newer major releases are accepted but untested.
+        if (major == 26 && minor >= 3) {
+            return V26_3;
+        }
+        return major > 26 ? NEWER : UNKNOWN;
     }
 
     private static ServerVersion computeServerVersion() {

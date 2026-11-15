@@ -13,8 +13,14 @@ public class ServerVersionTest {
         assertEquals(ServerVersion.V26_3, ServerVersion.parse("26.3-R0.1-SNAPSHOT"));
         assertEquals(ServerVersion.V26_3, ServerVersion.parse("26.3.build.248-stable"));
         assertEquals(ServerVersion.V26_3, ServerVersion.parse("git-Paper-123 (MC: 26.3)"));
-        // Future 26.x releases keep the same supported API family.
+        // Later 26.x releases keep the tested API family.
         assertEquals(ServerVersion.V26_3, ServerVersion.parse("26.4-R0.1-SNAPSHOT"));
+    }
+
+    @Test
+    public void acceptsNewerMajorVersions() {
+        assertEquals(ServerVersion.NEWER, ServerVersion.parse("27.1-R0.1-SNAPSHOT"));
+        assertEquals(ServerVersion.NEWER, ServerVersion.parse("git-Purpur-123 (MC: 28.0)"));
     }
 
     @Test
@@ -24,14 +30,19 @@ public class ServerVersionTest {
         assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("1.21.11-R0.1-SNAPSHOT"));
         assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("26.1-R0.1-SNAPSHOT"));
         assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("26.2-R0.1-SNAPSHOT"));
-        assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("27.1-R0.1-SNAPSHOT"));
     }
 
     @Test
-    public void only263IsSupported() {
+    public void supportedRangeStartsAt263() {
         assertTrue(ServerVersion.V26_3.isSupported());
+        assertTrue(ServerVersion.NEWER.isSupported());
         assertFalse(ServerVersion.UNKNOWN.isSupported());
+
+        assertFalse(ServerVersion.V26_3.isNewerThanTested());
+        assertTrue(ServerVersion.NEWER.isNewerThanTested());
+
         assertEquals("26.3", ServerVersion.V26_3.getName());
+        assertEquals("newer", ServerVersion.NEWER.getName());
         assertEquals("unknown", ServerVersion.UNKNOWN.getName());
     }
 
