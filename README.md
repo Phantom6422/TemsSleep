@@ -1,82 +1,40 @@
 # TemsSleep
 
-TemsSleep is a sleep plugin for **Paper and Purpur 26.x (26.1.1+)** Minecraft servers with one-player sleep,
-configurable sleep percentages, night-skip animations, clock animations, boss bars, insomnia, AFK
-exemptions and GSit/PlaceholderAPI/SuperVanish/Essentials hooks. Spigot and Bukkit are not supported.
+TemsSleep is a sleep plugin for **Paper and Purpur 26.x (26.1.1+)** servers. It provides one-player sleep,
+configurable sleep percentages, night-skip and clock animations, boss bars, insomnia, AFK exemptions,
+per-world flags, and GSit/PlaceholderAPI/SuperVanish/Essentials hooks.
 
-> **Note:** This plugin is a rebranded fork of [SleepMost](https://www.spigotmc.org/resources/60623/) by
-> [MrGeneralQ](https://github.com/MrGeneralQ) and the SleepMost contributors. This fork is maintained by
-> [Phantom6422](https://github.com/Phantom6422) for [PhantomsNetwork](https://phantomsnetwork.org) internal
-> use, so we do not provide support for other servers.
+> A rebranded fork of [SleepMost](https://www.spigotmc.org/resources/60623/) by
+> [MrGeneralQ](https://github.com/MrGeneralQ) and contributors, maintained by
+> [Phantom6422](https://github.com/Phantom6422) for [PhantomsNetwork](https://phantomsnetwork.org) internal use.
 
-> [!WARNING]
-> **This plugin is heavily modified using AI / "vibe coding" methods.**
->
-> The Paper 26.x port, rebrand, GitHub update checker, release automation, command and permission changes,
-> fixes and this documentation were produced with an AI coding agent under human direction and review.
->
-> It is tested by building, by unit tests and by Paper/Purpur 26.x startup smoke tests, but it has
-> **not** been battle-tested on a live server. Read the diff, test on a staging server, and keep a rollback jar before
-> running it in production. Treat every change in here as "review before trusting".
+## Install
 
-## Quick information
+Download the [latest release](https://github.com/Phantom6422/TemsSleep/releases/latest), place
+`TemsSleep-<version>.jar` in `plugins/`, start the server, and edit `plugins/TemsSleep/config.yml` and
+`messages.yml`.
 
-<img src="https://img.shields.io/badge/Java%20version-%2021+-blue?style=for-the-badge&logo=java&logoColor=white"
-alt="Plugin requires Java 21 or newer"></img>
-<img src="https://img.shields.io/badge/Minecraft-%2026.x-green?style=for-the-badge&logo=minecraft&logoColor=white"
-alt="Supports Minecraft 26.x (26.1.1 and newer)"></img>
-
-## Documentation
-
-TemsSleep is configured through `plugins/TemsSleep/config.yml` and `plugins/TemsSleep/messages.yml`.
-Most options can also be changed in-game per world with `/ts setflag`; see the
-[Commands and permissions](#commands-and-permissions) section below.
-
-To install, build the plugin or download the latest release, put `TemsSleep-<version>.jar` in your
-server's `plugins/` directory, start the server and edit the generated configuration files.
-
-## Basic set of features
-
-- One-player sleep and configurable sleep percentages
-- Night-skip and clock animations through to dawn
-- Boss bar progress with customizable messages and titles
-- Insomnia and AFK exemptions
-- GSit synthetic sleep, PlaceholderAPI placeholders, SuperVanish/PremiumVanish and Essentials hooks
-- Per-world flags and configuration
-- Update checker against public GitHub releases
-
-## Considerations
-
-- Paper **26.x** (26.1.1+) and Purpur **26.x** (26.1.1+) are supported from the same shaded jar.
-- A future **27.x+** server is detected, but this build disables itself with a clear message until it has
-  been validated against that API.
-- Spigot and Bukkit are **not** supported. The plugin is a Paper plugin (`paper-plugin.yml`, API 26.1) and
-  will not load on a Bukkit/Spigot server.
-- Folia is not officially supported because TemsSleep uses the global Bukkit scheduler.
-- On Purpur, the native AFK API (`Player#isAfk`) is used automatically for the `use-afk` exemption. On
-  Paper, configure the PlaceholderAPI-based AFK check if you need it.
-- The update checker reads the latest **public** GitHub release. A private repository cannot be read by the
-  plugin without credentials, so keep `Phantom6422/TemsSleep` public (or point
-  `update-checker-github-repository` in `config.yml` at a public repository) before relying on update checks.
+Only the latest release is kept on GitHub. The plugin's update checker reads the latest public release from
+`Phantom6422/TemsSleep`.
 
 ## Platforms
 
-- [x] Paper 26.x (26.1.1+)
-- [x] Purpur 26.x (26.1.1+)
-- [ ] Spigot / Bukkit *(not supported)*
-- [ ] Folia *(Uses the global Bukkit scheduler)*
+- Paper 26.x (26.1.1+)
+- Purpur 26.x (26.1.1+)
 
-## Commands and permissions
+Spigot, Bukkit and Folia are not supported.
 
-The main command is `/temssleep`. Backwards-compatible aliases are `/ts`, `/sleepmost` and `/sm`.
+## Commands
+
+The main command is `/temssleep` with aliases `/ts`, `/sleepmost` and `/sm`.
 
 | Command | Description |
 | --- | --- |
 | `/ts` | Show the command list |
-| `/ts enable` / `/ts disable` | Enable/disable TemsSleep in your world |
+| `/ts enable` / `/ts disable` | Enable or disable TemsSleep in your world |
 | `/ts setflag <flag> <value>` | Change a sleep flag |
-| `/ts info [page]` | Show the flags of your world |
-| `/ts version` | Show the installed/latest version |
+| `/ts info [page]` | Show your world's flags |
+| `/ts version` | Show the installed and latest version |
 | `/ts reset` | Reset all flags in your world |
 | `/ts setops` | Enable one-player sleep |
 | `/ts bed` | Teleport to your bed spawn |
@@ -88,37 +46,24 @@ The main command is `/temssleep`. Backwards-compatible aliases are `/ts`, `/slee
 | `/ts resetflag <flag>` | Reset a flag value |
 | `/ts debug` | Toggle debug output |
 
-The primary permission nodes are `temssleep.*` (for example `temssleep.setflag`, `temssleep.kick` and
-`temssleep.exempt`). The old `sleepmost.*` nodes are still accepted for backwards compatibility.
+Permissions use `temssleep.*` (for example `temssleep.setflag`, `temssleep.kick`, `temssleep.exempt`). Legacy
+`sleepmost.*` nodes are also accepted.
 
-## Releases and updates
-
-Only the newest release is kept on GitHub. Older releases and tags are removed, so always download the
-[latest release](https://github.com/Phantom6422/TemsSleep/releases/latest). Releases are published from tags
-named `v<version>` (currently `v6.0.3`). The plugin update checker reads the latest public GitHub release from
-`Phantom6422/TemsSleep` by default. Change `update-checker-github-repository` in `config.yml` if you use a
-different repository.
-
-## Building from Source
+## Build
 
 ```bash
 mvn clean package -pl paper -am
 ```
 
-Requires JDK 25 or newer; the produced bytecode targets Java 21. The build compiles against the Paper
-API for Minecraft 26.1. The shaded plugin is written to `target/TemsSleep-<version>.jar`.
+Requires JDK 25+; the output targets Java 21. The shaded jar is written to `target/TemsSleep-<version>.jar`.
 
-## Special thanks
+## Credits
 
-- [MrGeneralQ](https://github.com/MrGeneralQ) - author of [SleepMost](https://www.spigotmc.org/resources/60623/),
-  which this plugin is based on
+- [MrGeneralQ](https://github.com/MrGeneralQ) — author of
+  [SleepMost](https://www.spigotmc.org/resources/60623/)
 - LesleyXYZ, HorrendousEntity, dubsector and the SleepMost contributors
-- [PhantomsNetwork](https://phantomsnetwork.org) - for testing and running TemsSleep
+- [PhantomsNetwork](https://phantomsnetwork.org) — testing and hosting
 
 ## License
 
-TemsSleep is licensed under the MIT License. The original project credits and notices are kept in the
-repository.
-
-- [License text](LICENSE)
-- Upstream project: [SleepMost](https://www.spigotmc.org/resources/60623/)
+MIT. See [LICENSE](LICENSE).
