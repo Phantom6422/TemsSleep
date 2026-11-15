@@ -11,13 +11,12 @@
     <modules>
         <module>core</module>
         <module>paper</module>
-        <module>spigot</module>
     </modules>
     <properties>
         <!-- Single source of truth for the plugin version; bump this to release. -->
-        <revision>5.9.6</revision>
-        <paper.version>1.21.11-R0.1-SNAPSHOT</paper.version>
-        <spigot.version>1.21.11-R0.1-SNAPSHOT</spigot.version>
+        <revision>6.0.0</revision>
+        <!-- TemsSleep targets Paper/Purpur 26.3 only. -->
+        <paper.version>26.3.build.248-stable</paper.version>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -36,10 +35,6 @@
         </plugins>
     </build>
     <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
         <repository>
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>

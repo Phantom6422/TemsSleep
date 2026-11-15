@@ -15,11 +15,11 @@ import me.mrgeneralq.sleepmost.core.placeholderapi.PapiExtension;
 import me.mrgeneralq.sleepmost.core.providers.GameRuleProvider;
 import me.mrgeneralq.sleepmost.core.runnables.Heartbeat;
 import me.mrgeneralq.sleepmost.core.statics.DataContainer;
+import me.mrgeneralq.sleepmost.core.statics.ServerPlatform;
 import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,6 +47,15 @@ public class Sleepmost extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
+		ServerVersion currentVersion = ServerVersion.CURRENT_VERSION;
+		if (!currentVersion.isSupported()) {
+			getLogger().severe("TemsSleep requires Paper or Purpur "
+					+ ServerVersion.MINIMUM_SUPPORTED_VERSION
+					+ "+. Detected " + currentVersion.getName() + "; disabling the plugin.");
+			getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
+
 		//used to load all modules
 		for(IPlatformModule module : ServiceLoader.load(IPlatformModule.class, this.getClass().getClassLoader())){
 			module.setup();
@@ -55,10 +64,7 @@ public class Sleepmost extends JavaPlugin {
 		}
 
 		instance = this;
-		getLogger().info("Detected Minecraft " + ServerVersion.CURRENT_VERSION.getName()
-				+ " (titles=" + ServerVersion.CURRENT_VERSION.supportsTitles()
-				+ ", bossbars=" + ServerVersion.CURRENT_VERSION.supportsBossBars()
-				+ ", gamerules=" + ServerVersion.CURRENT_VERSION.supportsGameRules() + ")");
+		getLogger().info("Detected " + ServerPlatform.get().getDisplayName() + " " + currentVersion.getName());
 		saveDefaultConfig();
 
 		//init metrics
@@ -77,9 +83,7 @@ public class Sleepmost extends JavaPlugin {
 		//creating missing messages
 		this.messageService.createMissingMessages();
 
-		//check if boss bars are supported before registered
-		if(ServerVersion.CURRENT_VERSION.supportsBossBars())
-			this.registerBossBars();
+		this.registerBossBars();
 
 		//init commands
 		SleepmostCommand sleepmostCommand = new SleepmostCommand(bootstrapper.getSleepService(), bootstrapper.getMessageService(), bootstrapper.getUpdateService(), bootstrapper.getFlagService(), bootstrapper.getFlagsRepository(), bootstrapper.getConfigRepository(), bootstrapper.getCooldownService(), bootstrapper.getBossBarService(), bootstrapper.getSleepMostWorldService(), bootstrapper.getSleepMostPlayerService(), bootstrapper.getInsomniaService(), bootstrapper.getDebugService(), bootstrapper.getHookService());
@@ -94,9 +98,7 @@ public class Sleepmost extends JavaPlugin {
 		pm.registerEvents(new PlayerJoinEventListener(this, bootstrapper.getUpdateService(), bootstrapper.getMessageService(), bootstrapper.getBossBarService(), bootstrapper.getSleepMostPlayerService()), this);
 		pm.registerEvents(new EntitySpawnEventListener(bootstrapper.getFlagsRepository()), this);
 
-		if(ServerVersion.CURRENT_VERSION.hasTimeSkipEvent()){
-			pm.registerEvents(new TimeSkipEventListener(bootstrapper.getSleepService()), this);
-		}
+		pm.registerEvents(new TimeSkipEventListener(bootstrapper.getSleepService()), this);
 
 		pm.registerEvents(new SleepSkipEventListener(bootstrapper.getMessageService(), bootstrapper.getConfigService(), bootstrapper.getSleepService(), bootstrapper.getFlagsRepository(), bootstrapper.getBossBarService(), bootstrapper.getHookService()), this);
 		pm.registerEvents(new PlayerBedLeaveEventListener(bootstrapper.getSleepService()), this);
@@ -177,18 +179,8 @@ public class Sleepmost extends JavaPlugin {
 	}
 
 	private void registerSleepmostCommand(SleepmostCommand sleepmostCommand) {
-		// Spigot/Bukkit register the command from plugin.yml.
-		try {
-			PluginCommand pluginCommand = getCommand(COMMAND_NAME);
-			if (pluginCommand != null) {
-				pluginCommand.setExecutor(sleepmostCommand);
-				pluginCommand.setTabCompleter(sleepmostCommand);
-				return;
-			}
-		} catch (UnsupportedOperationException ignored) {
-			// Paper plugins reject getCommand and use the command map below.
-		}
-
+		// Paper plugins do not use plugin.yml commands, so the platform module
+		// registers the command through the server command map.
 		for (IPlatformModule module : this.platformModules) {
 			module.registerCommand(this, COMMAND_NAME, COMMAND_ALIASES, sleepmostCommand, sleepmostCommand);
 		}
@@ -198,7 +190,7 @@ public class Sleepmost extends JavaPlugin {
 		for(World world: Bukkit.getWorlds()){
 			this.bootstrapper.getSleepMostWorldService().registerWorld(world);
 
-			if(ServerVersion.CURRENT_VERSION.supportsGameRules() && this.bootstrapper.getSleepService().isEnabledAt(world)){
+			if(this.bootstrapper.getSleepService().isEnabledAt(world)){
 				if(this.bootstrapper.getFlagsRepository().getDisableDaylightcycleGamerule().getValueAt(world)){
 					IGameRuleService gameRuleService = bootstrapper.getGameRuleService();
 					gameRuleService.setAdvanceTime(world,true);

@@ -8,7 +8,6 @@ import me.mrgeneralq.sleepmost.core.flags.types.AbstractFlag;
 import me.mrgeneralq.sleepmost.core.interfaces.IConfigRepository;
 import me.mrgeneralq.sleepmost.core.interfaces.IFlagsRepository;
 import me.mrgeneralq.sleepmost.core.interfaces.IHookService;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 
 import java.util.*;
 
@@ -109,12 +108,8 @@ public class FlagsRepository implements IFlagsRepository {
         setupFlag(this.insomniaMilkFlag = new InsomniaMilkFlag(new ConfigFlagController<>(configRepository)));
 
         setupFlag(this.dynamicAnimationSpeedFlag = new DynamicAnimationSpeedFlag(new ConfigFlagController<>(configRepository)));
+        setupFlag(this.longerNightDurationFlag = new LongerNightDurationFlag(new ConfigFlagController<>(configRepository)));
         setupFlag(this.disableDaylightcycleGamerule = new DisableDaylightcycleGamerule(new ConfigFlagController<>(configRepository)));
-
-        if(ServerVersion.CURRENT_VERSION.supportsGameRules()){
-            setupFlag(this.longerNightDurationFlag = new LongerNightDurationFlag(new ConfigFlagController<>(configRepository)));
-            setupFlag(this.disableDaylightcycleGamerule = new DisableDaylightcycleGamerule(new ConfigFlagController<>(configRepository)));
-        }
 
         //GSIT
         setupFlag(this.gSitHookFlag = new GSitHookFlag(new ConfigFlagController<>(configRepository)));

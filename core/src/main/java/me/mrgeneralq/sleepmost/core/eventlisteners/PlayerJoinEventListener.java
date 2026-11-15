@@ -4,7 +4,6 @@ import me.mrgeneralq.sleepmost.core.interfaces.IBossBarService;
 import me.mrgeneralq.sleepmost.core.interfaces.IMessageService;
 import me.mrgeneralq.sleepmost.core.interfaces.ISleepMostPlayerService;
 import me.mrgeneralq.sleepmost.core.interfaces.IUpdateService;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -45,7 +44,7 @@ public class PlayerJoinEventListener implements Listener {
             this.sleepMostPlayerService.registerNewPlayer(player);
 
 
-        if(ServerVersion.CURRENT_VERSION.supportsBossBars() && this.bossBarService != null)
+        if(this.bossBarService != null)
             this.bossBarService.registerPlayer(player.getWorld(), player);
 
         if (!player.hasPermission(UPDATE_PERMISSION) && !player.hasPermission(LEGACY_UPDATE_PERMISSION))

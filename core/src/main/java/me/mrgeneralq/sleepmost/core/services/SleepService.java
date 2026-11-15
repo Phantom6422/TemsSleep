@@ -11,6 +11,7 @@ import me.mrgeneralq.sleepmost.core.models.Hook;
 import me.mrgeneralq.sleepmost.core.models.SleepMostWorld;
 import me.mrgeneralq.sleepmost.core.runnables.NightcycleAnimationTask;
 import me.mrgeneralq.sleepmost.core.statics.DataContainer;
+import me.mrgeneralq.sleepmost.core.statics.ServerPlatform;
 import me.mrgeneralq.sleepmost.core.enums.SleepSkipCause;
 import me.mrgeneralq.sleepmost.core.events.SleepSkipEvent;
 import org.bukkit.*;
@@ -18,7 +19,6 @@ import org.bukkit.entity.Player;
 
 import static me.mrgeneralq.sleepmost.core.enums.SleepSkipCause.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -45,9 +45,6 @@ public class SleepService implements ISleepService {
             DEFAULT_NIGHT_START_TIME = 12541,
             DEFAULT_NIGHT_END_TIME = 23460,
             TICKS_PER_DAY = 24000;
-
-    // Resolved once: looking up the method for every sleep-count calculation is wasteful.
-    private static final Method AFK_METHOD = resolveAfkMethod();
 
     private int nightStartTime;
     private int nightEndTime;
@@ -124,21 +121,16 @@ public class SleepService implements ISleepService {
 
         final boolean useAfk = this.flagsRepository.getUseAfkFlag().getValueAt(world);
 
-        //AFK DETECTION (reflection)
-        if(useAfk && AFK_METHOD != null){
+        // Purpur exposes Player#isAfk(). Paper does not, so Paper servers fall
+        // back to the PlaceholderAPI check below when one is configured.
+        if(useAfk && ServerPlatform.hasNativeAfk()){
 
-            final Method isAfkMethod = AFK_METHOD;
-            filteredPlayers = filteredPlayers.stream().filter(p -> {
-                try {
-                    return !(boolean) isAfkMethod.invoke(p);
-                } catch (ReflectiveOperationException ignored) {
-                    // Never drop a player because an optional API changed.
-                    return true;
-                }
-            }).collect(Collectors.toList());
+            filteredPlayers = filteredPlayers.stream()
+                    .filter(p -> !ServerPlatform.isPlayerAfk(p))
+                    .collect(Collectors.toList());
 
             if (debug) {
-                this.debugService.print(String.format("&f[&b%s&f] &fNon AFK (server) [&e%s&f]: %s", world.getName(), playersList.size(), getJoinedStream(playersList, filteredPlayers)));
+                this.debugService.print(String.format("&f[&b%s&f] &fNon AFK (Purpur) [&e%s&f]: %s", world.getName(), playersList.size(), getJoinedStream(playersList, filteredPlayers)));
             }
         }
 
@@ -378,14 +370,6 @@ public class SleepService implements ISleepService {
 
         this.nightStartTime = start;
         this.nightEndTime = end;
-    }
-
-    private static Method resolveAfkMethod() {
-        try {
-            return Player.class.getMethod("isAfk");
-        } catch (NoSuchMethodException ignored) {
-            return null;
-        }
     }
 
     private String getJoinedStream(List<Player> playersList, List<Player> newPlayersList){

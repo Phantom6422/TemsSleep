@@ -9,7 +9,6 @@ import me.mrgeneralq.sleepmost.core.builders.MessageBuilder;
 import me.mrgeneralq.sleepmost.core.interfaces.*;
 import me.mrgeneralq.sleepmost.core.models.SleepMostWorld;
 import me.mrgeneralq.sleepmost.core.statics.DataContainer;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -69,7 +68,7 @@ public class PlayerSleepStateChangeEventListener implements Listener {
          * When the player is waking up, we always want to update the bossbar. Also if the world is getting disabled!
          */
         if (sleepState == SleepState.AWAKE) {
-            if (ServerVersion.CURRENT_VERSION.supportsBossBars() && this.flagsRepository.getUseBossBarFlag().getValueAt(world))
+            if (this.flagsRepository.getUseBossBarFlag().getValueAt(world))
                 this.updateBossBar(world);
             return;
         }
@@ -81,7 +80,7 @@ public class PlayerSleepStateChangeEventListener implements Listener {
             return;
         }
 
-        if (ServerVersion.CURRENT_VERSION.supportsBossBars() && this.flagsRepository.getUseBossBarFlag().getValueAt(world))
+        if (this.flagsRepository.getUseBossBarFlag().getValueAt(world))
             this.updateBossBar(world);
 
         SleepSkipCause skipCause = this.sleepService.getCurrentSkipCause(world);

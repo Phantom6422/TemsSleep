@@ -2,7 +2,6 @@ package me.mrgeneralq.sleepmost.core.eventlisteners;
 
 import me.mrgeneralq.sleepmost.core.interfaces.IBossBarService;
 import me.mrgeneralq.sleepmost.core.interfaces.ISleepMostWorldService;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +22,7 @@ public class WorldLoadEventListener implements Listener {
 
         World world = e.getWorld();
 
-        if(ServerVersion.CURRENT_VERSION.supportsBossBars() && this.bossBarService != null){
+        if(this.bossBarService != null){
             this.bossBarService.registerBossBar(world);
         }
 

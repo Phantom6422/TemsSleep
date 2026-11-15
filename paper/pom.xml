@@ -20,13 +20,6 @@
 
         <dependency>
             <groupId>me.mrgeneralq</groupId>
-            <artifactId>spigot</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>me.mrgeneralq</groupId>
             <artifactId>core</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>

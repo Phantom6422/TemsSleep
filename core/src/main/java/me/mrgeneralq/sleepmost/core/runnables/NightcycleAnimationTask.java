@@ -5,7 +5,6 @@ import me.mrgeneralq.sleepmost.core.interfaces.*;
 import me.mrgeneralq.sleepmost.core.models.SleepMostWorld;
 import me.mrgeneralq.sleepmost.core.statics.DataContainer;
 import me.mrgeneralq.sleepmost.core.enums.SleepSkipCause;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -147,8 +146,7 @@ public class NightcycleAnimationTask extends BukkitRunnable {
          *  All code below runs during the night
          ***************************************************/
 
-        if(this.flagsRepository.getClockAnimationFlag().getValueAt(world)
-                && ServerVersion.CURRENT_VERSION.supportsTitles()){
+        if(this.flagsRepository.getClockAnimationFlag().getValueAt(world)){
 
             final long time = world.getTime();
             // Refresh every tick while the sky is actually brightening so the
@@ -171,7 +169,6 @@ public class NightcycleAnimationTask extends BukkitRunnable {
         this.sleepService.executeSleepReset(world, this.lastSleeperName, this.lastSleeperDisplayName, this.peopleWhoSlept, this.skipCause);
 
         if(this.flagsRepository.getClockAnimationFlag().getValueAt(world)
-                && ServerVersion.CURRENT_VERSION.supportsTitles()
                 && this.skipCause == SleepSkipCause.NIGHT_TIME){
             sendTitles(configService.getResetTime());
         }

@@ -3,7 +3,6 @@ import me.mrgeneralq.sleepmost.core.interfaces.IGameRuleService;
 import me.mrgeneralq.sleepmost.core.interfaces.ISleepMostWorldService;
 import me.mrgeneralq.sleepmost.core.models.SleepMostWorld;
 import me.mrgeneralq.sleepmost.core.repositories.SleepMostWorldRepository;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 
 import org.bukkit.World;
 
@@ -33,8 +32,7 @@ public class SleepMostWorldService implements ISleepMostWorldService {
     @Override
     public void freezeTime(World world, Calendar calendar) {
 
-        if(ServerVersion.CURRENT_VERSION.supportsGameRules())
-            this.gameRuleService.setAdvanceTime(world, false);
+        this.gameRuleService.setAdvanceTime(world, false);
 
         SleepMostWorld sleepMostWorld = this.repository.get(world.getUID());
         if (sleepMostWorld == null) {
@@ -47,7 +45,6 @@ public class SleepMostWorldService implements ISleepMostWorldService {
     @Override
     public void unfreezeTime(World world) {
 
-        if(ServerVersion.CURRENT_VERSION.supportsGameRules())
         this.gameRuleService.setAdvanceTime(world, true);
 
         SleepMostWorld sleepMostWorld = this.repository.get(world.getUID());

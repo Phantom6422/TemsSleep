@@ -9,39 +9,30 @@ import static org.junit.Assert.assertTrue;
 public class ServerVersionTest {
 
     @Test
-    public void parsesYearBasedVersions() {
-        assertEquals(ServerVersion.V26_1, ServerVersion.parse("26.1-R0.1-SNAPSHOT"));
-        assertEquals(ServerVersion.V26_2, ServerVersion.parse("26.2-R0.1-SNAPSHOT"));
+    public void parsesSupportedPaperVersions() {
         assertEquals(ServerVersion.V26_3, ServerVersion.parse("26.3-R0.1-SNAPSHOT"));
-        // Future 26.x builds must keep the newest known capability set.
+        assertEquals(ServerVersion.V26_3, ServerVersion.parse("26.3.build.248-stable"));
+        assertEquals(ServerVersion.V26_3, ServerVersion.parse("git-Paper-123 (MC: 26.3)"));
+        // Future 26.x releases keep the same supported API family.
         assertEquals(ServerVersion.V26_3, ServerVersion.parse("26.4-R0.1-SNAPSHOT"));
     }
 
     @Test
-    public void parsesLegacyVersions() {
-        assertEquals(ServerVersion.V1_8, ServerVersion.parse("1.8.8-R0.1-SNAPSHOT"));
-        assertEquals(ServerVersion.V1_16, ServerVersion.parse("1.16.5-R0.1-SNAPSHOT"));
-        assertEquals(ServerVersion.V1_20, ServerVersion.parse("1.20.6-R0.1-SNAPSHOT"));
-        assertEquals(ServerVersion.V1_21, ServerVersion.parse("1.21.11-R0.1-SNAPSHOT"));
-        assertEquals(ServerVersion.V1_21, ServerVersion.parse("git-Paper-123 (MC: 1.21.11)"));
+    public void rejectsUnsupportedVersions() {
+        assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("1.8.8-R0.1-SNAPSHOT"));
+        assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("1.20.6-R0.1-SNAPSHOT"));
+        assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("1.21.11-R0.1-SNAPSHOT"));
+        assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("26.1-R0.1-SNAPSHOT"));
+        assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("26.2-R0.1-SNAPSHOT"));
+        assertEquals(ServerVersion.UNKNOWN, ServerVersion.parse("27.1-R0.1-SNAPSHOT"));
     }
 
     @Test
-    public void yearBasedVersionsSupportTitles() {
-        // This is the capability that gates the clock animation.
-        assertTrue(ServerVersion.V26_3.supportsTitles());
-        assertTrue(ServerVersion.V26_3.supportsBossBars());
-        assertTrue(ServerVersion.V26_3.supportsGameRules());
-        assertTrue(ServerVersion.V26_3.supportsClickableText());
-        assertTrue(ServerVersion.V26_3.hasTimeSkipEvent());
-    }
-
-    @Test
-    public void oldVersionsKeepTheirCapabilities() {
-        assertFalse(ServerVersion.V1_8.supportsTitles());
-        assertFalse(ServerVersion.V1_8.supportsGameRules());
-        assertTrue(ServerVersion.V1_12.supportsTitles());
-        assertTrue(ServerVersion.V1_15.hasTimeSkipEvent());
+    public void only263IsSupported() {
+        assertTrue(ServerVersion.V26_3.isSupported());
+        assertFalse(ServerVersion.UNKNOWN.isSupported());
+        assertEquals("26.3", ServerVersion.V26_3.getName());
+        assertEquals("unknown", ServerVersion.UNKNOWN.getName());
     }
 
     @Test

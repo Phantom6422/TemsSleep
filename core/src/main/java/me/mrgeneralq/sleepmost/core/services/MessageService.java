@@ -9,7 +9,6 @@ import me.mrgeneralq.sleepmost.core.builders.MessageBuilder;
 import me.mrgeneralq.sleepmost.core.mappers.MessageMapper;
 import me.mrgeneralq.sleepmost.core.models.ConfigMessage;
 import me.mrgeneralq.sleepmost.core.repositories.MessageRepository;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -101,7 +100,7 @@ public class MessageService implements IMessageService {
 
 		boolean kickingAllowed = this.flagsRepository.getAllowKickFlag().getValueAt(world);
 
-		if(ServerVersion.CURRENT_VERSION.supportsClickableText() && kickingAllowed){
+		if(kickingAllowed){
 
 			for(Player p: Bukkit.getOnlinePlayers().stream().filter(p -> p.getWorld() == world).collect(Collectors.toList())){
 
@@ -122,7 +121,7 @@ public class MessageService implements IMessageService {
 			return;
 		}
 
-		//the server version does NOT Support clickable text
+		// Clickable kick links are disabled for this world.
 		this.sendWorldMessage(world, playersLeftMessage);
 
 	}

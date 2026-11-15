@@ -19,9 +19,7 @@ public class ChatColorUtils
         }
 
         text = colorizeChatColors(text);
-
-        if(ServerVersion.CURRENT_VERSION.supportsHexColors())
-            text = colorizeHexColors(text);
+        text = colorizeHexColors(text);
 
         return text;
     }

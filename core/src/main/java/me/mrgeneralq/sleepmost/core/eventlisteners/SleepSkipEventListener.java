@@ -12,7 +12,6 @@ import me.mrgeneralq.sleepmost.core.hooks.GsitHook;
 import me.mrgeneralq.sleepmost.core.builders.MessageBuilder;
 import me.mrgeneralq.sleepmost.core.interfaces.*;
 import me.mrgeneralq.sleepmost.core.models.Hook;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +19,8 @@ import org.bukkit.event.Listener;
 
 import me.mrgeneralq.sleepmost.core.enums.SleepSkipCause;
 import me.mrgeneralq.sleepmost.core.events.SleepSkipEvent;
+
+import static me.mrgeneralq.sleepmost.core.utils.PlayerUtils.healToMaxHealth;
 
 import java.util.List;
 import java.util.Optional;
@@ -79,11 +80,9 @@ public class SleepSkipEventListener implements Listener {
 
         sendSkipSound(world, e, cause);
 
-        if (ServerVersion.CURRENT_VERSION.supportsTitles()) {
-            Sleepmost plugin = Sleepmost.getInstance();
-            if (plugin != null && plugin.isEnabled()) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> sendSkipTitle(world, e), 5L);
-            }
+        Sleepmost plugin = Sleepmost.getInstance();
+        if (plugin != null && plugin.isEnabled()) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> sendSkipTitle(world, e), 5L);
         }
 
         boolean shouldHeal = flagsRepository.getHealFlag().getValueAt(world);
@@ -99,7 +98,7 @@ public class SleepSkipEventListener implements Listener {
                     return;
                 }
                 if (shouldHeal)
-                    ServerVersion.CURRENT_VERSION.healToMaxHP(onlinePlayer);
+                    healToMaxHealth(onlinePlayer);
 
                 if (shouldFeed)
                     onlinePlayer.setFoodLevel(20);
@@ -118,7 +117,7 @@ public class SleepSkipEventListener implements Listener {
 
         this.sleepService.clearSleepersAt(world);
 
-        if(ServerVersion.CURRENT_VERSION.supportsBossBars() && this.bossBarService != null){
+        if(this.bossBarService != null){
             this.bossBarService.setVisible(world, false);
         }
 
@@ -140,15 +139,8 @@ public class SleepSkipEventListener implements Listener {
     }
 
     private void resetPhantomCounter(World world, List<OfflinePlayer> playersWhoSlept) {
-        /*
-         * DISCLAIMER: Statistic and TIME_SINCE_REST Does not exist
-         * in older versions of Minecraft
-         */
-        try {
-            for (Player p : playersWhoSlept.stream().filter(OfflinePlayer::isOnline).map(OfflinePlayer::getPlayer).filter(java.util.Objects::nonNull).collect(Collectors.toList()))
-                p.setStatistic(Statistic.TIME_SINCE_REST, 0);
-        } catch (NoSuchFieldError | IllegalArgumentException error) {
-            // statistic did not exist yet in some versions
+        for (Player p : playersWhoSlept.stream().filter(OfflinePlayer::isOnline).map(OfflinePlayer::getPlayer).filter(java.util.Objects::nonNull).collect(Collectors.toList())) {
+            p.setStatistic(Statistic.TIME_SINCE_REST, 0);
         }
     }
 

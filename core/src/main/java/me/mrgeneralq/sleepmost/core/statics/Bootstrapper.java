@@ -79,11 +79,8 @@ public class Bootstrapper {
         this.configMessageMapper = ConfigMessageMapper.getMapper();
         this.configMessageMapper.initialize(main);
 
-        //check if boss bars are supported
-        if(ServerVersion.CURRENT_VERSION.supportsBossBars()){
         this.bossBarRepository = new BossBarRepository();
         this.bossBarService = new BossBarService(this.bossBarRepository);
-        }
 
 
         //setups

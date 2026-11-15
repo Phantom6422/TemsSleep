@@ -4,7 +4,6 @@ import me.mrgeneralq.sleepmost.core.interfaces.IBossBarService;
 import me.mrgeneralq.sleepmost.core.interfaces.ICooldownService;
 import me.mrgeneralq.sleepmost.core.interfaces.ISleepMostPlayerService;
 import me.mrgeneralq.sleepmost.core.interfaces.ISleepService;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,8 +28,8 @@ public class PlayerQuitEventListener implements Listener {
 
         Player player = e.getPlayer();
 
-        if(ServerVersion.CURRENT_VERSION.supportsBossBars() && this.bossBarService != null)
-        this.bossBarService.unregisterPlayer(player.getWorld(), player);
+        if(this.bossBarService != null)
+            this.bossBarService.unregisterPlayer(player.getWorld(), player);
 
         this.cooldownService.removeCooldown(player);
         this.sleepService.setSleeping(player, false);

@@ -15,29 +15,26 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Paper platform support.
+ * Paper/Purpur platform support.
  * <p>
- * Paper plugins reject {@code JavaPlugin#getCommand}, so the command is
- * registered through the command map. The command map API is available on
- * Paper 1.21.x as well as 26.x, which keeps the same jar usable on both.
+ * Paper plugins cannot use {@code JavaPlugin#getCommand}, so the command is
+ * registered through the server command map. Purpur uses the same Paper API and
+ * therefore the same registration path.
  */
 public class PaperModule implements IPlatformModule {
 
     @Override
     public void setup() {
-        // Paper needs no platform-specific bootstrap.
+        // Paper and Purpur need no platform-specific bootstrap.
     }
 
     @Override
     public void registerCommand(Plugin plugin, String name, List<String> aliases,
                                 CommandExecutor executor, TabCompleter completer) {
 
-        if (!isPaper()) {
-            return;
-        }
-
         CommandMap commandMap = Bukkit.getServer().getCommandMap();
         if (commandMap.getCommand(name) != null) {
+            plugin.getLogger().warning("Command /" + name + " is already registered; skipping registration.");
             return;
         }
 
@@ -55,14 +52,5 @@ public class PaperModule implements IPlatformModule {
         };
 
         commandMap.register(plugin.getName().toLowerCase(Locale.ROOT), command);
-    }
-
-    private static boolean isPaper() {
-        try {
-            Class.forName("io.papermc.paper.configuration.GlobalConfiguration");
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
     }
 }

@@ -5,7 +5,6 @@ import me.mrgeneralq.sleepmost.core.interfaces.IBossBarService;
 import me.mrgeneralq.sleepmost.core.interfaces.IMessageService;
 import me.mrgeneralq.sleepmost.core.interfaces.ISleepService;
 import me.mrgeneralq.sleepmost.core.statics.DataContainer;
-import me.mrgeneralq.sleepmost.core.statics.ServerVersion;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,10 +35,8 @@ public class PlayerWorldChangeEventListener implements Listener {
         this.dataContainer.setPlayerSleeping(e.getFrom(), player.getUniqueId(), false);
         this.sleepService.setSleeping(player, false);
 
-        if(ServerVersion.CURRENT_VERSION.supportsBossBars()){
-            this.bossBarService.unregisterPlayer(e.getFrom(), player);
-            this.bossBarService.registerPlayer(world,player);
-        }
+        this.bossBarService.unregisterPlayer(e.getFrom(), player);
+        this.bossBarService.registerPlayer(world,player);
 
         if(!player.hasPermission("temssleep.notify") && !player.hasPermission("sleepmost.notify"))
             return;

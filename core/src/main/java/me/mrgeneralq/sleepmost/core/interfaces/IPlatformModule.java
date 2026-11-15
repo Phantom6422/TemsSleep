@@ -14,11 +14,9 @@ public interface IPlatformModule {
     void setup();
 
     /**
-     * Registers the main command when the platform does not provide one from
-     * {@code plugin.yml} (Paper plugins register commands programmatically).
-     *
-     * <p>The default implementation is a no-op for platforms that already
-     * registered the command from {@code plugin.yml}.</p>
+     * Registers the main command. Paper plugins cannot use {@code plugin.yml}
+     * commands, so the Paper/Purpur implementation registers through the server
+     * command map.
      */
     default void registerCommand(Plugin plugin, String name, List<String> aliases,
                                  CommandExecutor executor, TabCompleter completer) {
