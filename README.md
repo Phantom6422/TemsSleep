@@ -93,9 +93,11 @@ The primary permission nodes are `temssleep.*` (for example `temssleep.setflag`,
 
 ## Releases and updates
 
-Releases are published from tags named `v<version>` (for example `v6.0.3`). The plugin update checker reads
-the latest public GitHub release from `Phantom6422/TemsSleep` by default. Change
-`update-checker-github-repository` in `config.yml` if you use a different repository.
+Only the newest release is kept on GitHub. Older releases and tags are removed, so always download the
+[latest release](https://github.com/Phantom6422/TemsSleep/releases/latest). Releases are published from tags
+named `v<version>` (currently `v6.0.3`). The plugin update checker reads the latest public GitHub release from
+`Phantom6422/TemsSleep` by default. Change `update-checker-github-repository` in `config.yml` if you use a
+different repository.
 
 ## Building from Source
 
