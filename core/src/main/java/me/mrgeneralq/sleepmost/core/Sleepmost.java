@@ -48,10 +48,21 @@ public class Sleepmost extends JavaPlugin {
 	public void onEnable() {
 
 		ServerVersion currentVersion = ServerVersion.CURRENT_VERSION;
+		String detectedVersion = Bukkit.getMinecraftVersion();
+		if (detectedVersion == null || detectedVersion.isBlank()) {
+			detectedVersion = currentVersion.getName();
+		}
 		if (!currentVersion.isSupported()) {
-			getLogger().severe("TemsSleep requires Paper or Purpur "
-					+ ServerVersion.MINIMUM_SUPPORTED_VERSION
-					+ "+. Detected " + currentVersion.getName() + "; disabling the plugin.");
+			if (currentVersion.isNewerThanTested()) {
+				getLogger().severe("TemsSleep supports the Paper/Purpur 26.x line ("
+						+ ServerVersion.MINIMUM_SUPPORTED_VERSION
+						+ "+). Detected " + detectedVersion
+						+ ", which is newer and has not been validated yet; disabling the plugin.");
+			} else {
+				getLogger().severe("TemsSleep requires Paper or Purpur "
+						+ ServerVersion.MINIMUM_SUPPORTED_VERSION
+						+ "+. Detected " + detectedVersion + "; disabling the plugin.");
+			}
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
@@ -64,15 +75,7 @@ public class Sleepmost extends JavaPlugin {
 		}
 
 		instance = this;
-		String detectedVersion = Bukkit.getMinecraftVersion();
-		if (detectedVersion == null || detectedVersion.isBlank()) {
-			detectedVersion = currentVersion.getName();
-		}
 		getLogger().info("Detected " + ServerPlatform.get().getDisplayName() + " " + detectedVersion);
-		if (currentVersion.isNewerThanTested()) {
-			getLogger().warning("TemsSleep was tested on " + ServerVersion.MINIMUM_SUPPORTED_VERSION
-					+ "; this server is newer and may introduce API changes. Please report any issues.");
-		}
 		saveDefaultConfig();
 
 		//init metrics

@@ -8,19 +8,19 @@ import java.util.regex.Pattern;
 /**
  * Runtime Minecraft version detection.
  * <p>
- * TemsSleep supports Paper and Purpur 26.3 and newer. Anything older is
- * reported as {@link #UNKNOWN}; the plugin then disables itself instead of
- * running against a partially supported API.
+ * TemsSleep supports all Paper and Purpur 26.x releases from 26.1.1 onward.
+ * Anything older is reported as {@link #UNKNOWN}; the plugin then disables
+ * itself instead of running against a partially supported API.
  * <p>
- * Later 26.x releases keep the tested API family ({@link #V26_3}). A newer
- * major release is accepted as {@link #NEWER} so the plugin can still load,
- * but it is logged as untested because future Paper APIs may change.
+ * Every 26.x release shares the tested API family ({@link #V26_X}). A newer
+ * major release is detected as {@link #NEWER} but is not enabled until it has
+ * been validated against that API.
  */
 public enum ServerVersion
 {
-    UNKNOWN, V26_3, NEWER;
+    UNKNOWN, V26_X, NEWER;
 
-    public static final String MINIMUM_SUPPORTED_VERSION = "26.3";
+    public static final String MINIMUM_SUPPORTED_VERSION = "26.1.1";
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)");
     private static final Pattern MC_VERSION_PATTERN = Pattern.compile("MC:\\s*(\\d+)\\.(\\d+)");
@@ -40,7 +40,7 @@ public enum ServerVersion
         } else if ("NEWER".equals(enumName)) {
             this.name = "newer";
         } else {
-            this.name = enumName.substring(1).replace('_', '.');
+            this.name = "26.x";
         }
     }
 
@@ -49,24 +49,24 @@ public enum ServerVersion
     }
 
     public boolean isSupported() {
-        return this == V26_3 || this == NEWER;
+        return this == V26_X;
     }
 
     /**
-     * @return true when the server is newer than the version TemsSleep was
-     *         tested against (26.3)
+     * @return true when the server is a newer major release than the tested
+     *         26.x line
      */
     public boolean isNewerThanTested() {
         return this == NEWER;
     }
 
     /**
-     * Parses a Paper/Minecraft version string such as {@code 26.3-R0.1-SNAPSHOT},
-     * {@code 26.3.build.248-stable} or {@code git-Paper-123 (MC: 26.3)}.
+     * Parses a Paper/Minecraft version string such as {@code 26.1.2-...},
+     * {@code 26.3.build.248-stable} or {@code git-Paper-123 (MC: 26.2)}.
      *
      * @param rawVersion raw version string, may be {@code null}
-     * @return {@link #V26_3} for 26.3-26.x, {@link #NEWER} for newer major
-     *         releases, otherwise {@link #UNKNOWN}
+     * @return {@link #V26_X} for any 26.x release, {@link #NEWER} for a newer
+     *         major release, otherwise {@link #UNKNOWN}
      */
     public static ServerVersion parse(String rawVersion) {
         if (rawVersion == null || rawVersion.isEmpty()) {
@@ -90,10 +90,10 @@ public enum ServerVersion
             return UNKNOWN;
         }
 
-        // 26.3 is the minimum supported release. Later 26.x releases keep the
-        // same API family; newer major releases are accepted but untested.
-        if (major == 26 && minor >= 3) {
-            return V26_3;
+        // The 26.x line starts at 26.1.1. Every 26.x release uses the same
+        // tested API family; newer major releases are detected but not enabled.
+        if (major == 26 && minor >= 1) {
+            return V26_X;
         }
         return major > 26 ? NEWER : UNKNOWN;
     }

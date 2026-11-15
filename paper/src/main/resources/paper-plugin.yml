@@ -1,9 +1,9 @@
 name: TemsSleep
-version: '6.0.1'
+version: '6.0.2'
 main: me.mrgeneralq.sleepmost.core.Sleepmost
-# Paper/Purpur 26.3+ only. Older servers refuse to load this plugin.
-api-version: '26.3'
-description: One-player sleep, night skip animations and sleep utilities for Paper and Purpur 26.3+ servers.
+# Paper/Purpur 26.x only. Older servers refuse to load this plugin.
+api-version: '26.1'
+description: One-player sleep, night skip animations and sleep utilities for Paper and Purpur 26.x servers.
 authors: [Phantom6422, MrGeneralQ, LesleyXYZ, HorrendousEntity, dubsector]
 website: https://github.com/Phantom6422/TemsSleep
 load: POSTWORLD

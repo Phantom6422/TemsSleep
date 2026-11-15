@@ -1,6 +1,6 @@
 # TemsSleep
 
-TemsSleep is a sleep plugin for **Paper and Purpur 26.3+** Minecraft servers with one-player sleep,
+TemsSleep is a sleep plugin for **Paper and Purpur 26.x (26.1.1+)** Minecraft servers with one-player sleep,
 configurable sleep percentages, night-skip animations, clock animations, boss bars, insomnia, AFK
 exemptions and GSit/PlaceholderAPI/SuperVanish/Essentials hooks. Spigot and Bukkit are not supported.
 
@@ -12,10 +12,10 @@ exemptions and GSit/PlaceholderAPI/SuperVanish/Essentials hooks. Spigot and Bukk
 > [!WARNING]
 > **This plugin is heavily modified using AI / "vibe coding" methods.**
 >
-> The Paper 26.3 port, rebrand, GitHub update checker, release automation, command and permission changes,
+> The Paper 26.x port, rebrand, GitHub update checker, release automation, command and permission changes,
 > fixes and this documentation were produced with an AI coding agent under human direction and review.
 >
-> It is tested by building, by unit tests and by Paper 26.3 and Purpur 26.3 startup smoke tests, but it has
+> It is tested by building, by unit tests and by Paper/Purpur 26.x startup smoke tests, but it has
 > **not** been battle-tested on a live server. Read the diff, test on a staging server, and keep a rollback jar before
 > running it in production. Treat every change in here as "review before trusting".
 
@@ -23,8 +23,8 @@ exemptions and GSit/PlaceholderAPI/SuperVanish/Essentials hooks. Spigot and Bukk
 
 <img src="https://img.shields.io/badge/Java%20version-%2021+-blue?style=for-the-badge&logo=java&logoColor=white"
 alt="Plugin requires Java 21 or newer"></img>
-<img src="https://img.shields.io/badge/Minecraft-%2026.3%2B-green?style=for-the-badge&logo=minecraft&logoColor=white"
-alt="Supports Minecraft 26.3 and newer"></img>
+<img src="https://img.shields.io/badge/Minecraft-%2026.x-green?style=for-the-badge&logo=minecraft&logoColor=white"
+alt="Supports Minecraft 26.x (26.1.1 and newer)"></img>
 
 ## Documentation
 
@@ -47,9 +47,9 @@ server's `plugins/` directory, start the server and edit the generated configura
 
 ## Considerations
 
-- Paper **26.3+** and Purpur **26.3+** are supported from the same shaded jar.
-- Newer major releases are accepted and load with a startup warning, but only **26.3** is currently tested.
-  Future Paper API changes may require a plugin update.
+- Paper **26.x** (26.1.1+) and Purpur **26.x** (26.1.1+) are supported from the same shaded jar.
+- A future **27.x+** server is detected, but this build disables itself with a clear message until it has
+  been validated against that API.
 - Spigot and Bukkit are **not** supported. The plugin is a Paper plugin (`paper-plugin.yml`, API 26.3) and
   will not load on a Bukkit/Spigot server.
 - Folia is not officially supported because TemsSleep uses the global Bukkit scheduler.
@@ -61,8 +61,8 @@ server's `plugins/` directory, start the server and edit the generated configura
 
 ## Platforms
 
-- [x] Paper 26.3+
-- [x] Purpur 26.3+
+- [x] Paper 26.x (26.1.1+)
+- [x] Purpur 26.x (26.1.1+)
 - [ ] Spigot / Bukkit *(not supported)*
 - [ ] Folia *(Uses the global Bukkit scheduler)*
 
@@ -93,7 +93,7 @@ The primary permission nodes are `temssleep.*` (for example `temssleep.setflag`,
 
 ## Releases and updates
 
-Releases are published from tags named `v<version>` (for example `v6.0.1`). The plugin update checker reads
+Releases are published from tags named `v<version>` (for example `v6.0.2`). The plugin update checker reads
 the latest public GitHub release from `Phantom6422/TemsSleep` by default. Change
 `update-checker-github-repository` in `config.yml` if you use a different repository.
 
