@@ -1,0 +1,22 @@
+[versions]
+paper = "26.1.2.build.74-stable"
+bstats = "3.0.0"
+placeholderapi = "2.12.2"
+gsit = "3.0.1"
+supervanish = "6.2.19"
+annotations = "26.0.2"
+junit = "5.9.1"
+shadow = "9.4.3"
+
+[libraries]
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
+placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+gsit = { module = "com.github.Gecolay.GSit:core", version.ref = "gsit" }
+supervanish = { module = "com.github.LeonMangler:SuperVanish", version.ref = "supervanish" }
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+
+[plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

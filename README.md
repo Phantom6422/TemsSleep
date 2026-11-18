@@ -52,10 +52,10 @@ Permissions use `temssleep.*` (for example `temssleep.setflag`, `temssleep.kick`
 ## Build
 
 ```bash
-mvn clean package -pl paper -am
+./gradlew shadowJar
 ```
 
-Requires JDK 25+; the output targets Java 21. The shaded jar is written to `target/TemsSleep-<version>.jar`.
+Requires JDK 25+. The shaded jar is written to `paper/build/libs/TemsSleep-<version>.jar`.
 
 ## Credits
 

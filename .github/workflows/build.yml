@@ -9,15 +9,15 @@ on:
 
 permissions: {}
 
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       actions: write
-    outputs:
-      version: ${{ steps.ver.outputs.version }}
-      mc_version: ${{ steps.mcver.outputs.mc_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -30,38 +30,25 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
 
-      # On tag pushes (v*) the tag defines the build version: v5.8.1 builds
-      # TemsSleep-5.8.1.jar by overriding the pom's revision property.
+      # On tag pushes (v*) the tag defines the build version: v6.0.3 builds
+      # TemsSleep-6.0.3.jar by overriding the Gradle buildVersion property.
       - name: Derive version from tag
         id: tagver
         run: |
           if [ "$GITHUB_REF_TYPE" = "tag" ]; then
-            echo "revision=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Build
         env:
-          REVISION: ${{ steps.tagver.outputs.revision }}
-        run: mvn clean package -pl paper -am -B ${REVISION:+-Drevision=$REVISION}
-
-      - name: Get version
-        id: ver
-        env:
-          REVISION: ${{ steps.tagver.outputs.revision }}
-        run: echo "version=${REVISION:-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)}" >> "$GITHUB_OUTPUT"
-
-      - name: Extract target Paper version
-        id: mcver
-        run: |
-          MC_VERSION=$(python3 -c "import re; c=open('pom.xml').read(); m=re.search(r'<paper\.version>([0-9]+\.[0-9]+(?:\.[0-9]+)?)', c); print(m.group(1) if m else '')")
-          echo "mc_version=${MC_VERSION}" >> "$GITHUB_OUTPUT"
-          echo "Target Paper version: ${MC_VERSION}"
+          VERSION: ${{ steps.tagver.outputs.version }}
+        run: ./gradlew clean build ${VERSION:+-PbuildVersion=$VERSION}
 
       - name: Upload plugin artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: TemsSleep
-          path: target/TemsSleep-*.jar
+          path: paper/build/libs/TemsSleep-*.jar
 
   paper-smoke-test:
     name: Paper Smoke Test (${{ matrix.mc_version }})
