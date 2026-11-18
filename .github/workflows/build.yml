@@ -30,8 +30,8 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
 
-      # On tag pushes (v*) the tag defines the build version: v6.0.3 builds
-      # TemsSleep-6.0.3.jar by overriding the Gradle buildVersion property.
+      # On tag pushes (v*) the tag defines the build version: v6.0.4 builds
+      # TemsSleep-6.0.4.jar by overriding the Gradle buildVersion property.
       - name: Derive version from tag
         id: tagver
         run: |

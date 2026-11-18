@@ -1,3 +1,12 @@
+6.0.4 - Gradle build
+
+- Convert the build from Maven to Gradle with root, core and paper modules
+- Add a Gradle version catalog and wrapper
+- Migrate tests to JUnit 5
+- Build with the Java 25 toolchain
+- Keep the shaded TemsSleep-<version>.jar output
+- Update CI, README and local agent notes
+
 6.0.3 - Paper/Purpur 26.x bug fixes
 
 - Do not cancel daytime bed interactions that only set the spawn point

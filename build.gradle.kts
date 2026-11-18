@@ -4,7 +4,7 @@ plugins {
 
 defaultTasks("shadowJar")
 
-version = providers.gradleProperty("buildVersion").orElse("6.0.3").get()
+version = providers.gradleProperty("buildVersion").orElse("6.0.4").get()
 group = "me.mrgeneralq"
 
 subprojects {
