@@ -14,8 +14,8 @@ Download the [latest release](https://github.com/Phantom6422/TemsSleep/releases/
 `TemsSleep-<version>.jar` in `plugins/`, start the server, and edit `plugins/TemsSleep/config.yml` and
 `messages.yml`.
 
-Only the latest release is kept on GitHub. The plugin's update checker reads the latest public release from
-`Phantom6422/TemsSleep`.
+Releases from **6.0.0 onward** (Paper/Purpur only) are kept on GitHub; older 5.x releases are removed. The
+plugin's update checker reads the latest public release from `Phantom6422/TemsSleep`.
 
 ## Platforms
 
