@@ -6,7 +6,7 @@ per-world flags, and GSit/PlaceholderAPI/SuperVanish/Essentials hooks.
 
 > A rebranded fork of [SleepMost](https://www.spigotmc.org/resources/60623/) by
 > [MrGeneralQ](https://github.com/MrGeneralQ) and contributors, maintained by
-> [Phantom6422](https://github.com/Phantom6422) for [PhantomsNetwork](https://phantomsnetwork.org) internal use.
+> [Phantom6422](https://github.com/Phantom6422) for internal use.
 
 ## Install
 
@@ -62,7 +62,6 @@ Requires JDK 25+. The shaded jar is written to `paper/build/libs/TemsSleep-<vers
 - [MrGeneralQ](https://github.com/MrGeneralQ) — author of
   [SleepMost](https://www.spigotmc.org/resources/60623/)
 - LesleyXYZ, HorrendousEntity, dubsector and the SleepMost contributors
-- [PhantomsNetwork](https://phantomsnetwork.org) — testing and hosting
 
 ## License
 
