@@ -6,7 +6,7 @@ per-world flags, and GSit/PlaceholderAPI/SuperVanish/Essentials hooks.
 
 > A rebranded fork of [SleepMost](https://www.spigotmc.org/resources/60623/) by
 > [MrGeneralQ](https://github.com/MrGeneralQ) and contributors, maintained by
-> [Phantom6422](https://github.com/Phantom6422) for internal use.
+> [Phantom6422](https://github.com/Phantom6422) for [PhantomsNetwork](https://phantomsnetwork.org) internal use.
 
 ## Install
 
